@@ -1,12 +1,15 @@
 package com.hexaware.OnlineFoodDeliverySys.service;
 
-import com.hexaware.OnlineFoodDeliverySys.entities.LoyaltyProgram;
 import java.util.List;
+import java.util.Optional;
+import com.hexaware.OnlineFoodDeliverySys.dto.LoyaltyProgramDto;
+import com.hexaware.OnlineFoodDeliverySys.entities.LoyaltyProgram;
 
 public interface LoyaltyProgramService {
-    LoyaltyProgram createLoyaltyProgram(LoyaltyProgram program);
-    LoyaltyProgram getLoyaltyProgramById(Long programId);
+    LoyaltyProgram addLoyaltyProgram(LoyaltyProgramDto dto);
+    LoyaltyProgram updateLoyaltyProgram(LoyaltyProgram loyaltyProgram);
+    LoyaltyProgram getByLoyaltyId(Long loyaltyId);
+    String deleteByLoyaltyId(Long loyaltyId);
     List<LoyaltyProgram> getAllLoyaltyPrograms();
-    LoyaltyProgram updateLoyaltyProgram(Long programId, LoyaltyProgram program);
-    void deleteLoyaltyProgram(Long programId);
+    Optional<LoyaltyProgram> getByUserId(Long userId);
 }

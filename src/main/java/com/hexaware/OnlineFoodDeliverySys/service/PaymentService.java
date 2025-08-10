@@ -1,12 +1,14 @@
 package com.hexaware.OnlineFoodDeliverySys.service;
 
-import com.hexaware.OnlineFoodDeliverySys.entities.Payment;
 import java.util.List;
+import com.hexaware.OnlineFoodDeliverySys.dto.PaymentDto;
+import com.hexaware.OnlineFoodDeliverySys.entities.Payment;
 
 public interface PaymentService {
-    Payment createPayment(Payment payment);
-    Payment getPaymentById(Long paymentId);
+    Payment addPayment(PaymentDto dto);
+    Payment updatePayment(Payment payment);
+    Payment getByPaymentId(Long paymentId);
+    String deleteByPaymentId(Long paymentId);
     List<Payment> getAllPayments();
-    Payment updatePayment(Long paymentId, Payment payment);
-    void deletePayment(Long paymentId);
+    Payment getByBookingId(Long bookingId);
 }

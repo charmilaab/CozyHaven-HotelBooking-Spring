@@ -1,12 +1,16 @@
 package com.hexaware.OnlineFoodDeliverySys.service;
 
-import com.hexaware.OnlineFoodDeliverySys.entities.User;
 import java.util.List;
+import java.util.Optional;
+import com.hexaware.OnlineFoodDeliverySys.dto.UserDto;
+import com.hexaware.OnlineFoodDeliverySys.entities.User;
 
 public interface UserService {
-    User createUser(User user);
-    User getUserById(Long userId);
+    User addUser(UserDto dto);
+    User updateUser(User user);
+    User getByUserId(Long userId);
+    String deleteByUserId(Long userId);
     List<User> getAllUsers();
-    User updateUser(Long userId, User user);
-    void deleteUser(Long userId);
+    Optional<User> getByEmail(String email);
+    List<User> getByRole(String role);
 }

@@ -1,12 +1,14 @@
 package com.hexaware.OnlineFoodDeliverySys.service;
 
-import com.hexaware.OnlineFoodDeliverySys.entities.Hotel;
 import java.util.List;
+import com.hexaware.OnlineFoodDeliverySys.dto.HotelDto;
+import com.hexaware.OnlineFoodDeliverySys.entities.Hotel;
 
 public interface HotelService {
-    Hotel createHotel(Hotel hotel);
-    Hotel getHotelById(Long hotelId);
+    Hotel addHotel(HotelDto dto);
+    Hotel updateHotel(Hotel hotel);
+    Hotel getByHotelId(Long hotelId);
+    String deleteByHotelId(Long hotelId);
     List<Hotel> getAllHotels();
-    Hotel updateHotel(Long hotelId, Hotel hotel);
-    void deleteHotel(Long hotelId);
+    List<Hotel> searchByLocation(String location);
 }

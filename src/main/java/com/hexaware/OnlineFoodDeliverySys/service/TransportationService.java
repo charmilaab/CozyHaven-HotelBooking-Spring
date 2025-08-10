@@ -1,12 +1,14 @@
 package com.hexaware.OnlineFoodDeliverySys.service;
 
-import com.hexaware.OnlineFoodDeliverySys.entities.Transportation;
 import java.util.List;
+import com.hexaware.OnlineFoodDeliverySys.dto.TransportationDto;
+import com.hexaware.OnlineFoodDeliverySys.entities.Transportation;
 
 public interface TransportationService {
-    Transportation createTransportation(Transportation transportation);
-    Transportation getTransportationById(Long transportationId);
+    Transportation addTransportation(TransportationDto dto);
+    Transportation updateTransportation(Transportation transportation);
+    Transportation getByTransportationId(Long transportId);
+    String deleteByTransportationId(Long transportId);
     List<Transportation> getAllTransportations();
-    Transportation updateTransportation(Long transportationId, Transportation transportation);
-    void deleteTransportation(Long transportationId);
+    List<Transportation> getByHotelId(Long hotelId);
 }
