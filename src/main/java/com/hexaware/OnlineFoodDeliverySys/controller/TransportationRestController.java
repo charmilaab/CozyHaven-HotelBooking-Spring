@@ -20,13 +20,13 @@ public class TransportationRestController {
     @PostMapping("/insert")
     public Transportation addTransportation(@RequestBody @Valid TransportationDto dto) {
         log.info("Received request to add transportation: {}", dto);
-        return service.addTransportation(dto);
+        return service.addTransport(dto);
     }
 
     @PutMapping("/update")
     public Transportation updateTransportation(@RequestBody @Valid Transportation transportation) {
         log.info("Received request to update transportation: {}", transportation);
-        return service.updateTransportation(transportation);
+        return service.updateTransport(transportation);
     }
 
     @GetMapping("/getbyid/{transportId}")
