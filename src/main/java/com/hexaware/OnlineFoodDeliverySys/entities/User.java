@@ -32,8 +32,4 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     @JsonManagedReference(value = "user-review")
     private List<Review> reviewList;
-
-    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
-    @JsonManagedReference(value = "user-loyalty")
-    private LoyaltyProgram loyaltyProgram;
 }

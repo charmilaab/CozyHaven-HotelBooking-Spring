@@ -1,31 +1,29 @@
 package com.hexaware.OnlineFoodDeliverySys.dto;
 
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
 public class UserDto {
 
+    @Min(1)
     private Long userId;
 
-    @Pattern(regexp = "[A-Z][a-z]{1,20}", message = "User name must start with a capital letter and have 2-21 letters")
+    @Pattern(regexp = "^[A-Z][a-zA-Z]{1,29}$", message = "User name must start with a capital letter and contain only alphabets")
     private String userName;
 
     @Email(message = "Invalid email format")
     private String email;
 
-    @NotBlank(message = "Password cannot be blank")
+    @Pattern(regexp = "^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d).{6,20}$",
+             message = "Password must have at least one uppercase, one lowercase, one digit, and be 6-20 characters")
     private String password;
 
-    @Pattern(regexp = "\\d{10}", message = "Phone number must be 10 digits")
+    @Pattern(regexp = "^[6-9]\\d{9}$", message = "Phone number must be a valid 10-digit Indian number")
     private String phoneNumber;
 
+    @Pattern(regexp = "^(USER|ADMIN|OWNER)$", message = "User role must be USER, ADMIN, or OWNER")
     private String userRole;
-
-    private LocalDateTime createdAt;
 }

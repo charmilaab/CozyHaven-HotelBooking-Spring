@@ -1,7 +1,6 @@
 package com.hexaware.OnlineFoodDeliverySys.dto;
 
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import java.time.LocalDate;
@@ -10,24 +9,28 @@ import java.time.LocalDate;
 @NoArgsConstructor
 public class BookingDto {
 
+    @Min(1)
     private Long bookingId;
 
-    @NotNull(message = "User is required")
-    private UserDto user;
+    @NotNull(message = "User ID is required")
+    private Long userId;
 
-    @NotNull(message = "Room is required")
-    private RoomDto room;
+    @NotNull(message = "Room ID is required")
+    private Long roomId;
 
-    @NotNull(message = "Check-in date is required")
+    @FutureOrPresent(message = "Check-in date must be today or later")
     private LocalDate checkInDate;
 
-    @NotNull(message = "Check-out date is required")
+    @Future(message = "Check-out date must be in the future")
     private LocalDate checkOutDate;
 
-    @Min(value = 1, message = "Number of rooms must be at least 1")
+    @Min(1)
+    @Max(10)
     private Integer numberOfRooms;
 
+    @DecimalMin(value = "0.0", inclusive = false)
     private Double totalAmount;
 
+    @Pattern(regexp = "^(CONFIRMED|CANCELLED|PENDING)$", message = "Status must be CONFIRMED, CANCELLED, or PENDING")
     private String status;
 }

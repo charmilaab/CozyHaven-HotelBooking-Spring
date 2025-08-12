@@ -43,10 +43,6 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
     }
 
-    @ExceptionHandler(LoyaltyProgramNotFoundException.class)
-    public ResponseEntity<String> handleLoyaltyProgramNotFound(LoyaltyProgramNotFoundException ex) {
-        return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
-    }
 
     // Fallback for any unexpected exception
     @ExceptionHandler(Exception.class)

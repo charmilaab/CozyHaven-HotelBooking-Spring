@@ -1,8 +1,6 @@
 package com.hexaware.OnlineFoodDeliverySys.dto;
 
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -10,16 +8,19 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ReviewDto {
 
+    @Min(1)
     private Long reviewId;
 
-    private HotelDto hotel;
+    @NotNull(message = "Hotel ID is required")
+    private Long hotelId;
 
-    private UserDto user;
+    @NotNull(message = "User ID is required")
+    private Long userId;
 
-    @NotBlank(message = "Comment cannot be blank")
+    @Size(max = 300, message = "Comment cannot exceed 300 characters")
     private String comment;
 
-    @Min(value = 1, message = "Rating must be at least 1")
-    @Max(value = 5, message = "Rating must be at most 5")
+    @Min(1)
+    @Max(5)
     private int rating;
 }
