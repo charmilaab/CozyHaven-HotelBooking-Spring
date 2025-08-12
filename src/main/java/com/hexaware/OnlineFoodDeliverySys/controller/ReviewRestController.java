@@ -1,16 +1,14 @@
 package com.hexaware.OnlineFoodDeliverySys.controller;
 
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-
 import com.hexaware.OnlineFoodDeliverySys.dto.ReviewDto;
 import com.hexaware.OnlineFoodDeliverySys.entities.Review;
 import com.hexaware.OnlineFoodDeliverySys.service.ReviewService;
-
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Slf4j
 @RestController
@@ -40,9 +38,9 @@ public class ReviewRestController {
         return service.deleteByReviewId(reviewId);
     }
 
-    @GetMapping("/getbyhotelid/{hotelId}")
-    public List<Review> getByHotelId(@PathVariable Long hotelId) {
-        return service.getByHotelId(hotelId);
+    @GetMapping("/getbyhotel/{hotelId}")
+    public List<Review> getReviewsByHotel(@PathVariable Long hotelId) {
+        return service.getReviewsByHotel(hotelId);
     }
 
     @GetMapping("/getall")

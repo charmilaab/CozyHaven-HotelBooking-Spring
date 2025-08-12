@@ -1,8 +1,9 @@
 package com.hexaware.OnlineFoodDeliverySys.service;
 
-import java.util.List;
 import com.hexaware.OnlineFoodDeliverySys.dto.PaymentDto;
 import com.hexaware.OnlineFoodDeliverySys.entities.Payment;
+
+import java.util.List;
 
 public interface PaymentService {
     Payment addPayment(PaymentDto dto);

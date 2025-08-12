@@ -1,8 +1,9 @@
 package com.hexaware.OnlineFoodDeliverySys.service;
 
-import java.util.List;
 import com.hexaware.OnlineFoodDeliverySys.dto.RoomDto;
 import com.hexaware.OnlineFoodDeliverySys.entities.Room;
+
+import java.util.List;
 
 public interface RoomService {
     Room addRoom(RoomDto dto);
@@ -10,5 +11,5 @@ public interface RoomService {
     Room getByRoomId(Long roomId);
     String deleteByRoomId(Long roomId);
     List<Room> getAllRooms();
-    List<Room> getByHotelId(Long hotelId);
+    List<Room> getRoomsByHotel(Long hotelId);
 }

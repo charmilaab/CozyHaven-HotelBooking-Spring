@@ -3,84 +3,57 @@ package com.hexaware.OnlineFoodDeliverySys.service;
 import com.hexaware.OnlineFoodDeliverySys.dto.TransportationDto;
 import com.hexaware.OnlineFoodDeliverySys.entities.Hotel;
 import com.hexaware.OnlineFoodDeliverySys.entities.Transportation;
-import com.hexaware.OnlineFoodDeliverySys.exceptions.TransportationNotFoundException;
+import com.hexaware.OnlineFoodDeliverySys.repository.HotelRepository;
 import com.hexaware.OnlineFoodDeliverySys.repository.TransportationRepository;
-
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import lombok.extern.slf4j.Slf4j;
+import java.util.List;
 
-@Slf4j
 @Service
 public class TransportationServiceImpl implements TransportationService {
 
     @Autowired
-    private TransportationRepository transportationRepo;
+    private TransportationRepository repo;
+
+    @Autowired
+    private HotelRepository hotelRepo;
 
     @Override
-    public Transportation addTransportation(TransportationDto dto) {
-        Transportation transportation = new Transportation();
-
-        // map simple fields
-        transportation.setTransportId(dto.getTransportId());
-        transportation.setType(dto.getType());
-        transportation.setDetails(dto.getDetails());
-        transportation.setCost(dto.getCost());
-
-        // map nested HotelDto -> Hotel entity (if provided)
-        if (dto.getHotel() != null) {
-            Hotel hotel = new Hotel();
-            if (dto.getHotel().getHotelId() != null) {
-                hotel.setHotelId(dto.getHotel().getHotelId());
-            }
-            // optionally map more hotel fields here if needed
-            transportation.setHotel(hotel);
-        }
-
-        log.info("Adding new transportation: {}", dto);
-        return transportationRepo.save(transportation);
+    public Transportation addTransport(TransportationDto dto) {
+        Transportation transport = new Transportation();
+        transport.setTransportId(dto.getTransportId());
+        transport.setType(dto.getType());
+        transport.setDetails(dto.getDetails());
+        transport.setCost(dto.getCost());
+        Hotel hotel = hotelRepo.findById(dto.getHotelId()).orElse(null);
+        transport.setHotel(hotel);
+        return repo.save(transport);
     }
 
     @Override
-    public Transportation updateTransportation(Transportation transportation) {
-        if (!transportationRepo.existsById(transportation.getTransportId())) {
-            throw new TransportationNotFoundException(
-                "Transportation not found with ID: " + transportation.getTransportId()
-            );
-        }
-        log.info("Updating transportation with ID: {}", transportation.getTransportId());
-        return transportationRepo.save(transportation);
+    public Transportation updateTransport(Transportation transport) {
+        return repo.save(transport);
     }
 
     @Override
-    public Transportation getByTransportationId(Long transportId) {
-        return transportationRepo.findById(transportId)
-                .orElseThrow(() -> new TransportationNotFoundException(
-                    "Transportation not found with ID: " + transportId
-                ));
+    public Transportation getByTransportId(Long transportId) {
+        return repo.findById(transportId).orElse(null);
     }
 
     @Override
-    public String deleteByTransportationId(Long transportId) {
-        if (!transportationRepo.existsById(transportId)) {
-            throw new TransportationNotFoundException(
-                "Cannot delete. Transportation not found with ID: " + transportId
-            );
-        }
-        transportationRepo.deleteById(transportId);
+    public String deleteByTransportId(Long transportId) {
+        repo.deleteById(transportId);
         return "Transportation deleted successfully";
     }
 
     @Override
-    public List<Transportation> getAllTransportations() {
-        return transportationRepo.findAll();
+    public List<Transportation> getAllTransport() {
+        return repo.findAll();
     }
 
     @Override
-    public List<Transportation> getByHotelId(Long hotelId) {
-                return transportationRepo.findTransportOptionsByHotel(hotelId);
+    public List<Transportation> getTransportByHotel(Long hotelId) {
+        return repo.findTransportOptionsByHotel(hotelId);
     }
 }

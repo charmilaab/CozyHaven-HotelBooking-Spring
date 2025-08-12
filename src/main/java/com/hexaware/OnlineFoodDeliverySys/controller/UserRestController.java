@@ -1,17 +1,14 @@
 package com.hexaware.OnlineFoodDeliverySys.controller;
 
-import java.util.List;
-import java.util.Optional;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-
 import com.hexaware.OnlineFoodDeliverySys.dto.UserDto;
 import com.hexaware.OnlineFoodDeliverySys.entities.User;
 import com.hexaware.OnlineFoodDeliverySys.service.UserService;
-
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Slf4j
 @RestController
@@ -23,12 +20,13 @@ public class UserRestController {
 
     @PostMapping("/insert")
     public User addUser(@RequestBody @Valid UserDto dto) {
-        log.info("Adding user: {}", dto);
+        log.info("Adding new user: {}", dto);
         return service.addUser(dto);
     }
 
     @PutMapping("/update")
-    public User updateUser(@RequestBody User user) {
+    public User updateUser(@RequestBody @Valid User user) {
+        log.info("Updating user: {}", user);
         return service.updateUser(user);
     }
 
@@ -43,13 +41,13 @@ public class UserRestController {
     }
 
     @GetMapping("/getbyemail/{email}")
-    public Optional<User> getByEmail(@PathVariable String email) {
+    public User getByEmail(@PathVariable String email) {
         return service.getByEmail(email);
     }
 
     @GetMapping("/getbyrole/{role}")
-    public List<User> getByRole(@PathVariable String role) {
-        return service.getByRole(role);
+    public List<User> getByUserRole(@PathVariable String role) {
+        return service.getByUserRole(role);
     }
 
     @GetMapping("/getall")

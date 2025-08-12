@@ -1,16 +1,14 @@
 package com.hexaware.OnlineFoodDeliverySys.controller;
 
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-
 import com.hexaware.OnlineFoodDeliverySys.dto.RoomDto;
 import com.hexaware.OnlineFoodDeliverySys.entities.Room;
 import com.hexaware.OnlineFoodDeliverySys.service.RoomService;
-
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Slf4j
 @RestController
@@ -40,9 +38,9 @@ public class RoomRestController {
         return service.deleteByRoomId(roomId);
     }
 
-    @GetMapping("/getbyhotelid/{hotelId}")
-    public List<Room> getByHotelId(@PathVariable Long hotelId) {
-        return service.getByHotelId(hotelId);
+    @GetMapping("/getbyhotel/{hotelId}")
+    public List<Room> getRoomsByHotel(@PathVariable Long hotelId) {
+        return service.getRoomsByHotel(hotelId);
     }
 
     @GetMapping("/getall")
