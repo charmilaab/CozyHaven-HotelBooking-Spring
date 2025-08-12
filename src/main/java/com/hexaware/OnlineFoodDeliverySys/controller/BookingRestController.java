@@ -7,7 +7,6 @@ import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @Slf4j
@@ -20,31 +19,31 @@ public class BookingRestController {
 
     @PostMapping("/insert")
     public Booking addBooking(@RequestBody @Valid BookingDto dto) {
+        log.info("Received request to add booking: {}", dto);
         return service.addBooking(dto);
     }
 
     @PutMapping("/update")
-    public Booking updateBooking(@RequestBody Booking booking) {
+    public Booking updateBooking(@RequestBody @Valid Booking booking) {
+        log.info("Received request to update booking: {}", booking);
         return service.updateBooking(booking);
     }
 
     @GetMapping("/getbyid/{bookingId}")
     public Booking getByBookingId(@PathVariable Long bookingId) {
+        log.info("Received request to fetch booking with ID: {}", bookingId);
         return service.getByBookingId(bookingId);
     }
 
     @DeleteMapping("/deletebyid/{bookingId}")
     public String deleteByBookingId(@PathVariable Long bookingId) {
+        log.info("Received request to delete booking with ID: {}", bookingId);
         return service.deleteByBookingId(bookingId);
-    }
-
-    @GetMapping("/getbyuser/{userId}")
-    public List<Booking> getBookingsByUser(@PathVariable Long userId) {
-        return service.getBookingsByUser(userId);
     }
 
     @GetMapping("/getall")
     public List<Booking> getAllBookings() {
+        log.info("Received request to fetch all bookings");
         return service.getAllBookings();
     }
 }
