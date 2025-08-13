@@ -2,24 +2,21 @@ package com.hexaware.OnlineFoodDeliverySys.dto;
 
 import jakarta.validation.constraints.*;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Data
-@NoArgsConstructor
 public class HotelDto {
-
-    @Min(1)
+    @NotNull @Positive
     private Long hotelId;
 
-    @Pattern(regexp = "^[A-Z][a-zA-Z ]{2,50}$", message = "Hotel name must start with a capital letter")
+    @NotBlank @Size(min = 2, max = 60)
     private String name;
 
-    @NotBlank(message = "Location is required")
+    @NotBlank @Size(min = 2, max = 100)
     private String location;
 
-    @Size(max = 500, message = "Description cannot exceed 500 characters")
+    @NotBlank @Size(min = 5, max = 500)
     private String description;
 
-    @NotBlank(message = "Amenities cannot be blank")
+    @NotBlank @Size(min = 3, max = 300)
     private String amenities;
 }

@@ -4,46 +4,30 @@ import com.hexaware.OnlineFoodDeliverySys.dto.TransportationDto;
 import com.hexaware.OnlineFoodDeliverySys.entities.Transportation;
 import com.hexaware.OnlineFoodDeliverySys.service.TransportationService;
 import jakarta.validation.Valid;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
-@Slf4j
-@RestController
-@RequestMapping("/api/transportations")
+@RestController @RequestMapping("/api/transport")
 public class TransportationRestController {
 
-    @Autowired
-    private TransportationService service;
+    @Autowired private TransportationService service;
 
     @PostMapping("/insert")
-    public Transportation addTransportation(@RequestBody @Valid TransportationDto dto) {
-        log.info("Received request to add transportation: {}", dto);
-        return service.addTransport(dto);
-    }
+    public Transportation add(@RequestBody @Valid TransportationDto dto) { return service.addTransport(dto); }
 
     @PutMapping("/update")
-    public Transportation updateTransportation(@RequestBody @Valid Transportation transportation) {
-        log.info("Received request to update transportation: {}", transportation);
-        return service.updateTransport(transportation);
-    }
+    public Transportation update(@RequestBody @Valid Transportation transport) { return service.updateTransport(transport); }
 
-    @GetMapping("/getbyid/{transportId}")
-    public Transportation getByTransportId(@PathVariable Long transportId) {
-        log.info("Received request to fetch transportation with ID: {}", transportId);
-        return service.getByTransportId(transportId);
-    }
+    @GetMapping("/getbyid/{id}")
+    public Transportation get(@PathVariable Long id) { return service.getByTransportId(id); }
 
-    @DeleteMapping("/deletebyid/{transportId}")
-    public String deleteByTransportId(@PathVariable Long transportId) {
-        log.info("Received request to delete transportation with ID: {}", transportId);
-        return service.deleteByTransportId(transportId);
-    }
+    @DeleteMapping("/deletebyid/{id}")
+    public String delete(@PathVariable Long id) { return service.deleteByTransportId(id); }
 
     @GetMapping("/getall")
-    public List<Transportation> getAllTransportations() {
-        log.info("Received request to fetch all transportations");
-        return service.getAllTransport();
-    }
+    public List<Transportation> all() { return service.getAllTransport(); }
+
+    @GetMapping("/byhotel/{hotelId}")
+    public List<Transportation> byHotel(@PathVariable Long hotelId) { return service.getTransportByHotel(hotelId); }
 }

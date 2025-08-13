@@ -2,7 +2,6 @@ package com.hexaware.OnlineFoodDeliverySys.service;
 
 import com.hexaware.OnlineFoodDeliverySys.dto.TransportationDto;
 import com.hexaware.OnlineFoodDeliverySys.entities.Transportation;
-
 import java.util.List;
 
 public interface TransportationService {

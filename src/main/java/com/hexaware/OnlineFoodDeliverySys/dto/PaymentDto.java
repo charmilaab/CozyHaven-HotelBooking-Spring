@@ -2,28 +2,23 @@ package com.hexaware.OnlineFoodDeliverySys.dto;
 
 import jakarta.validation.constraints.*;
 import lombok.Data;
-import lombok.NoArgsConstructor;
-import java.time.LocalDateTime;
 
 @Data
-@NoArgsConstructor
 public class PaymentDto {
-
-    @Min(1)
+    @NotNull @Positive
     private Long paymentId;
 
-    @NotNull(message = "Booking ID is required")
+    @NotNull @Positive
     private Long bookingId;
 
-    @DecimalMin(value = "0.0", inclusive = false)
+    @NotNull @Positive
     private Double amount;
 
-    @Pattern(regexp = "^(CASH|CARD|UPI)$", message = "Payment method must be CASH, CARD, or UPI")
+    @NotBlank
+    @Pattern(regexp = "^(CARD|UPI|NETBANKING|CASH)$", message = "paymentMethod must be CARD/UPI/NETBANKING/CASH")
     private String paymentMethod;
 
-    @Pattern(regexp = "^(SUCCESS|FAILED|PENDING)$", message = "Status must be SUCCESS, FAILED, or PENDING")
+    @NotBlank
+    @Pattern(regexp = "^(PENDING|PAID|FAILED|REFUNDED)$", message = "status must be PENDING/PAID/FAILED/REFUNDED")
     private String status;
-
-    @PastOrPresent(message = "Payment date must be current or past")
-    private LocalDateTime paymentDate;
 }

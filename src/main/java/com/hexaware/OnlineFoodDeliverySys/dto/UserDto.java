@@ -2,28 +2,29 @@ package com.hexaware.OnlineFoodDeliverySys.dto;
 
 import jakarta.validation.constraints.*;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Data
-@NoArgsConstructor
 public class UserDto {
-
-    @Min(1)
+    @NotNull @Positive
     private Long userId;
 
-    @Pattern(regexp = "^[A-Z][a-zA-Z]{1,29}$", message = "User name must start with a capital letter and contain only alphabets")
+    @NotBlank
+    @Pattern(regexp = "^[A-Za-z ]{2,40}$", message = "Name should be alphabetic 2-40 chars")
     private String userName;
 
-    @Email(message = "Invalid email format")
+    @NotBlank @Email
     private String email;
 
-    @Pattern(regexp = "^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d).{6,20}$",
-             message = "Password must have at least one uppercase, one lowercase, one digit, and be 6-20 characters")
+    @NotBlank
+    @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!#%*?&])[A-Za-z\\d@$!#%*?&]{8,30}$",
+            message = "Password must be 8-30 chars incl. upper/lower/digit/special")
     private String password;
 
-    @Pattern(regexp = "^[6-9]\\d{9}$", message = "Phone number must be a valid 10-digit Indian number")
+    // Indian mobile example 10 digits (adjust for your region as needed)
+    @NotBlank @Pattern(regexp = "^[6-9]\\d{9}$", message = "Phone must be 10 digits starting 6-9")
     private String phoneNumber;
 
-    @Pattern(regexp = "^(USER|ADMIN|OWNER)$", message = "User role must be USER, ADMIN, or OWNER")
+    @NotBlank
+    @Pattern(regexp = "^(ADMIN|HOTEL_OWNER|CUSTOMER)$", message = "Role must be ADMIN/HOTEL_OWNER/CUSTOMER")
     private String userRole;
 }

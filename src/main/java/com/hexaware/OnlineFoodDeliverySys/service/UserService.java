@@ -2,8 +2,7 @@ package com.hexaware.OnlineFoodDeliverySys.service;
 
 import com.hexaware.OnlineFoodDeliverySys.dto.UserDto;
 import com.hexaware.OnlineFoodDeliverySys.entities.User;
-
-import java.util.List;
+import java.util.*;
 
 public interface UserService {
     User addUser(UserDto dto);
@@ -13,5 +12,4 @@ public interface UserService {
     List<User> getAllUsers();
     User getByEmail(String email);
     List<User> getByUserRole(String role);
-
 }

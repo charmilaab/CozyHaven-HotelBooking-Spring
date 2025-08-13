@@ -2,35 +2,33 @@ package com.hexaware.OnlineFoodDeliverySys.dto;
 
 import jakarta.validation.constraints.*;
 import lombok.Data;
-import lombok.NoArgsConstructor;
+
 import java.time.LocalDate;
 
 @Data
-@NoArgsConstructor
 public class BookingDto {
-
-    @Min(1)
+    @NotNull @Positive
     private Long bookingId;
 
-    @NotNull(message = "User ID is required")
+    @NotNull @Positive
     private Long userId;
 
-    @NotNull(message = "Room ID is required")
+    @NotNull @Positive
     private Long roomId;
 
-    @FutureOrPresent(message = "Check-in date must be today or later")
+    @NotNull @FutureOrPresent
     private LocalDate checkInDate;
 
-    @Future(message = "Check-out date must be in the future")
+    @NotNull
     private LocalDate checkOutDate;
 
-    @Min(1)
-    @Max(10)
+    @NotNull @Min(1) @Max(20)
     private Integer numberOfRooms;
 
-    @DecimalMin(value = "0.0", inclusive = false)
+    @NotNull @Positive
     private Double totalAmount;
 
-    @Pattern(regexp = "^(CONFIRMED|CANCELLED|PENDING)$", message = "Status must be CONFIRMED, CANCELLED, or PENDING")
+    @NotBlank
+    @Pattern(regexp = "^(PENDING|CONFIRMED|CANCELLED)$", message = "status must be PENDING/CONFIRMED/CANCELLED")
     private String status;
 }
