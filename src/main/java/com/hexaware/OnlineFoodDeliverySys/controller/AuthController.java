@@ -36,17 +36,18 @@ public class AuthController {
         user.setCreatedAt(LocalDateTime.now());
         userRepository.save(user);
 
-        String token = jwtUtil.generateToken(user.getEmail());
         Map<String, String> response = new HashMap<>();
         response.put("message", "User registered successfully");
-        response.put("token", token);
         return response;
     }
 
     @PostMapping("/login")
     public Map<String, String> login(@RequestBody User loginRequest) {
         Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword())
+                new UsernamePasswordAuthenticationToken(
+                        loginRequest.getEmail(),
+                        loginRequest.getPassword()
+                )
         );
 
         String token = jwtUtil.generateToken(authentication.getName());

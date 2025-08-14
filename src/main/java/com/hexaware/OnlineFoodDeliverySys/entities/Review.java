@@ -12,9 +12,10 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 @Table(name = "review")
 public class Review {
 
-    @Id
-    private Long reviewId;
-
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long reviewId;
+	
     @ManyToOne
     @JoinColumn(name = "hotel_id", nullable = false)
     @JsonBackReference(value = "hotel-review")

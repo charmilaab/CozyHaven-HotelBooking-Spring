@@ -1,12 +1,18 @@
 package com.hexaware.OnlineFoodDeliverySys.dto;
 
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import jakarta.validation.constraints.*;
 import lombok.Data;
 
 @Data
 public class ReviewDto {
-    @NotNull @Positive
-    private Long reviewId;
+    
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long reviewId;
+
 
     @NotNull @Positive
     private Long hotelId;
@@ -18,5 +24,6 @@ public class ReviewDto {
     private String comment;
 
     @Min(1) @Max(5)
-    private int rating;
+    private Integer rating;  
+
 }

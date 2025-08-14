@@ -6,48 +6,61 @@ import com.hexaware.OnlineFoodDeliverySys.exceptions.HotelNotFoundException;
 import com.hexaware.OnlineFoodDeliverySys.repository.HotelRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
 
 @Service
 public class HotelServiceImpl implements HotelService {
-    @Autowired private HotelRepository repo;
+
+    @Autowired
+    private HotelRepository hotelRepository;
 
     @Override
     public Hotel addHotel(HotelDto dto) {
-        Hotel h = new Hotel();
-        h.setHotelId(dto.getHotelId());
-        h.setName(dto.getName());
-        h.setLocation(dto.getLocation());
-        h.setDescription(dto.getDescription());
-        h.setAmenities(dto.getAmenities());
-        return repo.save(h);
+        Hotel hotel = new Hotel();
+        hotel.setHotelId(dto.getHotelId());
+        hotel.setName(dto.getName());
+        hotel.setLocation(dto.getLocation());
+        hotel.setDescription(dto.getDescription());
+        hotel.setAmenities(dto.getAmenities());
+        return hotelRepository.save(hotel);
     }
 
     @Override
     public Hotel updateHotel(Hotel hotel) {
-        repo.findById(hotel.getHotelId())
-            .orElseThrow(() -> new HotelNotFoundException("Hotel not found: " + hotel.getHotelId()));
-        return repo.save(hotel);
+        Hotel existingHotel = hotelRepository.findById(hotel.getHotelId())
+                .orElseThrow(() -> new HotelNotFoundException(
+                        "Hotel not found with ID: " + hotel.getHotelId()));
+        existingHotel.setName(hotel.getName());
+        existingHotel.setLocation(hotel.getLocation());
+        existingHotel.setDescription(hotel.getDescription());
+        existingHotel.setAmenities(hotel.getAmenities());
+        return hotelRepository.save(existingHotel);
     }
 
     @Override
-    public Hotel getByHotelId(Long id) {
-        return repo.findById(id)
-                .orElseThrow(() -> new HotelNotFoundException("Hotel not found: " + id));
-    }
-
-    @Override
-    public String deleteByHotelId(Long id) {
-        Hotel h = getByHotelId(id);
-        repo.delete(h);
+    public String deleteHotel(Long hotelId) {
+        Hotel hotel = hotelRepository.findById(hotelId)
+                .orElseThrow(() -> new HotelNotFoundException(
+                        "Hotel not found with ID: " + hotelId));
+        hotelRepository.delete(hotel);
         return "Hotel deleted successfully";
     }
 
     @Override
-    public List<Hotel> getAllHotels() { return repo.findAll(); }
+    public Hotel getByHotelId(Long hotelId) {
+        return hotelRepository.findById(hotelId)
+                .orElseThrow(() -> new HotelNotFoundException(
+                        "Hotel not found with ID: " + hotelId));
+    }
 
     @Override
-    public List<Hotel> searchByLocation(String location) {
-        return repo.searchHotelsByLocation(location);
+    public List<Hotel> getAllHotels() {
+        return hotelRepository.findAll();
+    }
+
+    @Override
+    public List<Hotel> searchHotelsByLocation(String location) {
+        return hotelRepository.searchHotelsByLocation(location);
     }
 }

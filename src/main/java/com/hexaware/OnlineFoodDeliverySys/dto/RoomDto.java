@@ -5,6 +5,7 @@ import lombok.Data;
 
 @Data
 public class RoomDto {
+
     @NotNull @Positive
     private Long roomId;
 
@@ -12,7 +13,7 @@ public class RoomDto {
     private Long hotelId;
 
     @NotBlank
-    @Pattern(regexp = "^(Single|Double|King|Suite)$", message = "roomType must be Single/Double/King/Suite")
+    @Pattern(regexp = "^(?i)(Single|Double|King|Suite)$", message = "roomType must be Single/Double/King/Suite")
     private String roomType;
 
     @NotNull @Positive
@@ -22,9 +23,9 @@ public class RoomDto {
     private Integer maxOccupancy;
 
     @NotBlank
-    @Pattern(regexp = "^(single|double|king)$", message = "bedType must be single/double/king")
+    @Pattern(regexp = "^(?i)(Single|Double|King)$", message = "bedType must be Single/Double/King")
     private String bedType;
 
-    @NotBlank @Size(min = 2, max = 30) // e.g., "70 m²"
+    @NotBlank @Size(min = 2, max = 30) // e.g., "25 m²"
     private String size;
 }

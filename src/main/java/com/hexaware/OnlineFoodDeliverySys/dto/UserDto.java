@@ -20,7 +20,6 @@ public class UserDto {
             message = "Password must be 8-30 chars incl. upper/lower/digit/special")
     private String password;
 
-    // Indian mobile example 10 digits (adjust for your region as needed)
     @NotBlank @Pattern(regexp = "^[6-9]\\d{9}$", message = "Phone must be 10 digits starting 6-9")
     private String phoneNumber;
 

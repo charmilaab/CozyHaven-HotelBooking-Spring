@@ -15,8 +15,9 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 @Table(name = "booking")
 public class Booking {
 
-    @Id
-    private Long bookingId;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long bookingId;
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)

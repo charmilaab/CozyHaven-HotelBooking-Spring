@@ -1,65 +1,110 @@
 package com.hexaware.OnlineFoodDeliverySys.service;
 
 import com.hexaware.OnlineFoodDeliverySys.dto.BookingDto;
-import com.hexaware.OnlineFoodDeliverySys.entities.*;
-import com.hexaware.OnlineFoodDeliverySys.exceptions.*;
-import com.hexaware.OnlineFoodDeliverySys.repository.*;
+import com.hexaware.OnlineFoodDeliverySys.entities.Booking;
+import com.hexaware.OnlineFoodDeliverySys.entities.Room;
+import com.hexaware.OnlineFoodDeliverySys.entities.User;
+import com.hexaware.OnlineFoodDeliverySys.exceptions.BookingNotFoundException;
+import com.hexaware.OnlineFoodDeliverySys.exceptions.RoomNotFoundException;
+import com.hexaware.OnlineFoodDeliverySys.exceptions.UserNotFoundException;
+import com.hexaware.OnlineFoodDeliverySys.repository.BookingRepository;
+import com.hexaware.OnlineFoodDeliverySys.repository.RoomRepository;
+import com.hexaware.OnlineFoodDeliverySys.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 @Service
 public class BookingServiceImpl implements BookingService {
-    @Autowired private BookingRepository repo;
-    @Autowired private UserRepository userRepo;
-    @Autowired private RoomRepository roomRepo;
+
+    @Autowired
+    private BookingRepository bookingRepo;
+
+    @Autowired
+    private UserRepository userRepo;
+
+    @Autowired
+    private RoomRepository roomRepo;
 
     @Override
-    public Booking addBooking(BookingDto dto) {
-        User user = userRepo.findById(dto.getUserId())
-                .orElseThrow(() -> new UserNotFoundException("User not found: " + dto.getUserId()));
-        Room room = roomRepo.findById(dto.getRoomId())
-                .orElseThrow(() -> new RoomNotFoundException("Room not found: " + dto.getRoomId()));
+    public Booking addBooking(BookingDto bookingDto) {
+        User user = userRepo.findById(bookingDto.getUserId())
+                .orElseThrow(() -> new UserNotFoundException("User not found with ID: " + bookingDto.getUserId()));
 
-        if (!dto.getCheckOutDate().isAfter(dto.getCheckInDate())) {
-            throw new IllegalArgumentException("checkOutDate must be after checkInDate");
+        Room room = roomRepo.findById(bookingDto.getRoomId())
+                .orElseThrow(() -> new RoomNotFoundException("Room not found with ID: " + bookingDto.getRoomId()));
+
+        Booking booking = new Booking();
+        booking.setUser(user);
+        booking.setRoom(room);
+        booking.setCheckInDate(bookingDto.getCheckInDate());
+        booking.setCheckOutDate(bookingDto.getCheckOutDate());
+
+        int numRooms = bookingDto.getNumberOfRooms() != null ? bookingDto.getNumberOfRooms() : 1;
+        booking.setNumberOfRooms(numRooms);
+
+        if (bookingDto.getTotalAmount() != null) {
+            booking.setTotalAmount(bookingDto.getTotalAmount());
+        } else {
+            long nights = ChronoUnit.DAYS.between(bookingDto.getCheckInDate(), bookingDto.getCheckOutDate());
+            booking.setTotalAmount(room.getBaseFare() * numRooms * nights);
         }
 
-        Booking b = new Booking();
-        b.setBookingId(dto.getBookingId());
-        b.setUser(user);
-        b.setRoom(room);
-        b.setCheckInDate(dto.getCheckInDate());
-        b.setCheckOutDate(dto.getCheckOutDate());
-        b.setNumberOfRooms(dto.getNumberOfRooms());
-        b.setTotalAmount(dto.getTotalAmount());
-        b.setStatus(dto.getStatus());
-        return repo.save(b);
+        booking.setStatus(bookingDto.getStatus());
+
+        return bookingRepo.save(booking);
     }
 
     @Override
-    public Booking updateBooking(Booking booking) {
-        repo.findById(booking.getBookingId())
-            .orElseThrow(() -> new BookingNotFoundException("Booking not found: " + booking.getBookingId()));
-        return repo.save(booking);
+    public Booking updateBooking(BookingDto bookingDto) {
+        Booking existing = bookingRepo.findById(bookingDto.getBookingId())
+                .orElseThrow(() -> new BookingNotFoundException("Booking not found with ID: " + bookingDto.getBookingId()));
+
+        User user = userRepo.findById(bookingDto.getUserId())
+                .orElseThrow(() -> new UserNotFoundException("User not found with ID: " + bookingDto.getUserId()));
+
+        Room room = roomRepo.findById(bookingDto.getRoomId())
+                .orElseThrow(() -> new RoomNotFoundException("Room not found with ID: " + bookingDto.getRoomId()));
+
+        existing.setUser(user);
+        existing.setRoom(room);
+        existing.setCheckInDate(bookingDto.getCheckInDate());
+        existing.setCheckOutDate(bookingDto.getCheckOutDate());
+
+        if (bookingDto.getNumberOfRooms() != null) {
+            existing.setNumberOfRooms(bookingDto.getNumberOfRooms());
+        }
+
+        if (bookingDto.getTotalAmount() != null) {
+            existing.setTotalAmount(bookingDto.getTotalAmount());
+        } else {
+            long nights = ChronoUnit.DAYS.between(bookingDto.getCheckInDate(), bookingDto.getCheckOutDate());
+            int numRooms = existing.getNumberOfRooms() != null ? existing.getNumberOfRooms() : 1;
+            existing.setTotalAmount(room.getBaseFare() * numRooms * nights);
+        }
+
+        existing.setStatus(bookingDto.getStatus());
+
+        return bookingRepo.save(existing);
     }
 
     @Override
-    public Booking getByBookingId(Long id) {
-        return repo.findById(id)
-                .orElseThrow(() -> new BookingNotFoundException("Booking not found: " + id));
+    public List<Booking> getAllBookings() {
+        return bookingRepo.findAll();
     }
 
     @Override
-    public String deleteByBookingId(Long id) {
-        Booking b = getByBookingId(id);
-        repo.delete(b);
-        return "Booking deleted successfully";
+    public Booking getBookingById(Long bookingId) {
+        return bookingRepo.findById(bookingId)
+                .orElseThrow(() -> new BookingNotFoundException("Booking not found with ID: " + bookingId));
     }
 
     @Override
-    public List<Booking> getAllBookings() { return repo.findAll(); }
-
-    @Override
-    public List<Booking> getBookingsByUser(Long userId) { return repo.findBookingsByUser(userId); }
+    public void deleteBooking(Long bookingId) {
+        Booking booking = bookingRepo.findById(bookingId)
+                .orElseThrow(() -> new BookingNotFoundException("Booking not found with ID: " + bookingId));
+        bookingRepo.delete(booking);
+    }
 }

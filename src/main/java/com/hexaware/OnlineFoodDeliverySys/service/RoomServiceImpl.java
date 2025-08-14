@@ -3,58 +3,73 @@ package com.hexaware.OnlineFoodDeliverySys.service;
 import com.hexaware.OnlineFoodDeliverySys.dto.RoomDto;
 import com.hexaware.OnlineFoodDeliverySys.entities.Hotel;
 import com.hexaware.OnlineFoodDeliverySys.entities.Room;
-import com.hexaware.OnlineFoodDeliverySys.exceptions.HotelNotFoundException;
-import com.hexaware.OnlineFoodDeliverySys.exceptions.RoomNotFoundException;
 import com.hexaware.OnlineFoodDeliverySys.repository.HotelRepository;
 import com.hexaware.OnlineFoodDeliverySys.repository.RoomRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
 
 @Service
 public class RoomServiceImpl implements RoomService {
-    @Autowired private RoomRepository repo;
-    @Autowired private HotelRepository hotelRepo;
+
+    private final RoomRepository roomRepository;
+    private final HotelRepository hotelRepository;
+
+    public RoomServiceImpl(RoomRepository roomRepository, HotelRepository hotelRepository) {
+        this.roomRepository = roomRepository;
+        this.hotelRepository = hotelRepository;
+    }
 
     @Override
     public Room addRoom(RoomDto dto) {
-        Hotel hotel = hotelRepo.findById(dto.getHotelId())
-                .orElseThrow(() -> new HotelNotFoundException("Hotel not found: " + dto.getHotelId()));
-        Room r = new Room();
-        r.setRoomId(dto.getRoomId());
-        r.setHotel(hotel);
-        r.setRoomType(dto.getRoomType());
-        r.setBaseFare(dto.getBaseFare());
-        r.setMaxOccupancy(dto.getMaxOccupancy());
-        r.setBedType(dto.getBedType());
-        r.setSize(dto.getSize());
-        return repo.save(r);
+        Room room = new Room();
+        room.setRoomId(dto.getRoomId());
+        room.setRoomType(dto.getBedType());
+        room.setBaseFare(dto.getBaseFare());
+        room.setMaxOccupancy(dto.getMaxOccupancy());
+        room.setBedType(dto.getBedType().toLowerCase()); // normalize to lowercase
+        room.setSize(dto.getSize());
+
+        Hotel hotel = hotelRepository.findById(dto.getHotelId())
+                .orElseThrow(() -> new RuntimeException("Hotel not found"));
+        room.setHotel(hotel);
+
+        return roomRepository.save(room);
     }
 
     @Override
-    public Room updateRoom(Room room) {
-        repo.findById(room.getRoomId())
-            .orElseThrow(() -> new RoomNotFoundException("Room not found: " + room.getRoomId()));
-        return repo.save(room);
+    public Room updateRoom(RoomDto dto) {
+        Room room = roomRepository.findById(dto.getRoomId())
+                .orElseThrow(() -> new RuntimeException("Room not found"));
+
+        room.setRoomType(dto.getBedType());
+        room.setBaseFare(dto.getBaseFare());
+        room.setMaxOccupancy(dto.getMaxOccupancy());
+        room.setBedType(dto.getBedType().toLowerCase());
+        room.setSize(dto.getSize());
+
+        Hotel hotel = hotelRepository.findById(dto.getHotelId())
+                .orElseThrow(() -> new RuntimeException("Hotel not found"));
+        room.setHotel(hotel);
+
+        return roomRepository.save(room);
     }
 
     @Override
-    public Room getByRoomId(Long id) {
-        return repo.findById(id).orElseThrow(() -> new RoomNotFoundException("Room not found: " + id));
+    public Room getRoomById(Long roomId) {
+        return roomRepository.findById(roomId)
+                .orElseThrow(() -> new RuntimeException("Room not found"));
     }
 
     @Override
-    public String deleteByRoomId(Long id) {
-        Room r = getByRoomId(id);
-        repo.delete(r);
-        return "Room deleted successfully";
+    public List<Room> getRoomsByHotelId(Long hotelId) {
+        return roomRepository.findRoomsByHotelId(hotelId);
     }
 
     @Override
-    public List<Room> getAllRooms() { return repo.findAll(); }
-
-    @Override
-    public List<Room> getByHotel(Long hotelId) {
-        return repo.findRoomsByHotelId(hotelId);
+    public void deleteRoom(Long roomId) {
+        Room room = roomRepository.findById(roomId)
+                .orElseThrow(() -> new RuntimeException("Room not found"));
+        roomRepository.delete(room);
     }
 }

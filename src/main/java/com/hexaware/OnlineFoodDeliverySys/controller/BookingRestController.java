@@ -6,28 +6,44 @@ import com.hexaware.OnlineFoodDeliverySys.service.BookingService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
-@RestController @RequestMapping("/api/bookings")
+@RestController
+@RequestMapping("/api/bookings")
 public class BookingRestController {
 
-    @Autowired private BookingService service;
+    @Autowired
+    private BookingService bookingService;
 
+    // Insert booking (bookingId auto-generated)
     @PostMapping("/insert")
-    public Booking add(@RequestBody @Valid BookingDto dto) { return service.addBooking(dto); }
+    public Booking add(@Valid @RequestBody BookingDto bookingDto) {
+        return bookingService.addBooking(bookingDto);
+    }
 
+    // Update booking (bookingId required)
     @PutMapping("/update")
-    public Booking update(@RequestBody @Valid Booking booking) { return service.updateBooking(booking); }
-
-    @GetMapping("/getbyid/{bookingId}")
-    public Booking get(@PathVariable Long bookingId) { return service.getByBookingId(bookingId); }
-
-    @DeleteMapping("/deletebyid/{bookingId}")
-    public String delete(@PathVariable Long bookingId) { return service.deleteByBookingId(bookingId); }
+    public Booking update(@Valid @RequestBody BookingDto bookingDto) {
+        if (bookingDto.getBookingId() == null) {
+            throw new IllegalArgumentException("Booking ID is required for update");
+        }
+        return bookingService.updateBooking(bookingDto);
+    }
 
     @GetMapping("/getall")
-    public List<Booking> all() { return service.getAllBookings(); }
+    public List<Booking> getAll() {
+        return bookingService.getAllBookings();
+    }
 
-    @GetMapping("/byuser/{userId}")
-    public List<Booking> byUser(@PathVariable Long userId) { return service.getBookingsByUser(userId); }
+    @GetMapping("/get/{id}")
+    public Booking getById(@PathVariable Long id) {
+        return bookingService.getBookingById(id);
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public String delete(@PathVariable Long id) {
+        bookingService.deleteBooking(id);
+        return "Booking deleted with ID: " + id;
+    }
 }

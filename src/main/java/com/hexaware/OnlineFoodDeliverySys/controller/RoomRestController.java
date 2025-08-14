@@ -3,30 +3,55 @@ package com.hexaware.OnlineFoodDeliverySys.controller;
 import com.hexaware.OnlineFoodDeliverySys.dto.RoomDto;
 import com.hexaware.OnlineFoodDeliverySys.entities.Room;
 import com.hexaware.OnlineFoodDeliverySys.service.RoomService;
+
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
-@RestController @RequestMapping("/api/rooms")
+@RestController
+@RequestMapping("/api/rooms")
 public class RoomRestController {
-    @Autowired private RoomService service;
 
-    @PostMapping("/insert")
-    public Room add(@RequestBody @Valid RoomDto dto) { return service.addRoom(dto); }
+    private final RoomService roomService;
 
+    public RoomRestController(RoomService roomService) {
+        this.roomService = roomService;
+    }
+
+    // Add new room
+    @PostMapping("/add")
+    public ResponseEntity<?> addRoom(@Valid @RequestBody RoomDto dto) {
+        Room room = roomService.addRoom(dto);
+        return ResponseEntity.ok("Room added successfully with ID: " + room.getRoomId());
+    }
+
+    // Update existing room
     @PutMapping("/update")
-    public Room update(@RequestBody @Valid Room room) { return service.updateRoom(room); }
+    public ResponseEntity<?> updateRoom(@Valid @RequestBody RoomDto dto) {
+        Room room = roomService.updateRoom(dto);
+        return ResponseEntity.ok("Room updated successfully with ID: " + room.getRoomId());
+    }
 
-    @GetMapping("/getbyid/{roomId}")
-    public Room get(@PathVariable Long roomId) { return service.getByRoomId(roomId); }
+    // Get room by ID
+    @GetMapping("/{roomId}")
+    public ResponseEntity<?> getRoomById(@PathVariable Long roomId) {
+        Room room = roomService.getRoomById(roomId);
+        return ResponseEntity.ok(room);
+    }
 
-    @DeleteMapping("/deletebyid/{roomId}")
-    public String delete(@PathVariable Long roomId) { return service.deleteByRoomId(roomId); }
+    // Get all rooms by hotel ID
+    @GetMapping("/hotel/{hotelId}")
+    public ResponseEntity<?> getRoomsByHotel(@PathVariable Long hotelId) {
+        List<Room> rooms = roomService.getRoomsByHotelId(hotelId);
+        return ResponseEntity.ok(rooms);
+    }
 
-    @GetMapping("/getall")
-    public List<Room> all() { return service.getAllRooms(); }
-
-    @GetMapping("/byhotel/{hotelId}")
-    public List<Room> byHotel(@PathVariable Long hotelId) { return service.getByHotel(hotelId); }
+    // Delete room by ID
+    @DeleteMapping("/delete/{roomId}")
+    public ResponseEntity<?> deleteRoom(@PathVariable Long roomId) {
+        roomService.deleteRoom(roomId);
+        return ResponseEntity.ok("Room deleted successfully with ID: " + roomId);
+    }
 }

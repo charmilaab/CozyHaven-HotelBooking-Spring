@@ -2,8 +2,12 @@ package com.hexaware.OnlineFoodDeliverySys.service;
 
 import com.hexaware.OnlineFoodDeliverySys.dto.BookingDto;
 import com.hexaware.OnlineFoodDeliverySys.entities.Booking;
+import com.hexaware.OnlineFoodDeliverySys.entities.Room;
+import com.hexaware.OnlineFoodDeliverySys.entities.User;
 import com.hexaware.OnlineFoodDeliverySys.exceptions.BookingNotFoundException;
 import com.hexaware.OnlineFoodDeliverySys.repository.BookingRepository;
+import com.hexaware.OnlineFoodDeliverySys.repository.RoomRepository;
+import com.hexaware.OnlineFoodDeliverySys.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -11,72 +15,105 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import java.time.LocalDate;
-import java.util.Arrays;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 class BookingServiceImplTest {
 
     @Mock
-    private BookingRepository repo;
+    private BookingRepository bookingRepo;
+
+    @Mock
+    private UserRepository userRepo;
+
+    @Mock
+    private RoomRepository roomRepo;
 
     @InjectMocks
-    private BookingServiceImpl service;
+    private BookingServiceImpl bookingService;
 
-    private Booking booking;
-    private BookingDto dto;
+    private User user;
+    private Room room;
+    private BookingDto bookingDto;
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-        booking = new Booking();
-        booking.setBookingId(201L);
-        booking.setCheckInDate(LocalDate.of(2025, 8, 10));
-        booking.setCheckOutDate(LocalDate.of(2025, 8, 15));
-        booking.setNumberOfRooms(2);
-        booking.setTotalAmount(5000.0);
-        booking.setStatus("CONFIRMED");
 
-        dto = new BookingDto();
-        dto.setBookingId(201L);
-        dto.setCheckInDate(LocalDate.of(2025, 8, 10));
-        dto.setCheckOutDate(LocalDate.of(2025, 8, 15));
-        dto.setNumberOfRooms(2);
-        dto.setTotalAmount(5000.0);
-        dto.setStatus("CONFIRMED");
+        // Setup sample user
+        user = new User();
+        user.setUserId(1L);
+
+        // Setup sample room
+        room = new Room();
+        room.setRoomId(1L);
+        room.setBaseFare(2000.0);
+
+        // Setup sample bookingDto (no totalAmount so it will be calculated)
+        bookingDto = new BookingDto(
+                null, // bookingId is null for add
+                1L,
+                1L,
+                LocalDate.now().plusDays(1),
+                LocalDate.now().plusDays(3),
+                2, // numberOfRooms
+                null, // totalAmount auto-calculated
+                "CONFIRMED"
+        );
     }
 
     @Test
     void testAddBooking() {
-        when(repo.save(any(Booking.class))).thenReturn(booking);
-        Booking saved = service.addBooking(dto);
-        assertEquals("CONFIRMED", saved.getStatus());
+        when(userRepo.findById(1L)).thenReturn(Optional.of(user));
+        when(roomRepo.findById(1L)).thenReturn(Optional.of(room));
+        when(bookingRepo.save(any(Booking.class))).thenAnswer(invocation -> invocation.getArgument(0));
+
+        Booking savedBooking = bookingService.addBooking(bookingDto);
+
+        // Nights = 2 days, Rooms = 2, Base Fare = 2000 → 2 nights × 2 rooms × 2000 = 8000
+        assertEquals(8000.0, savedBooking.getTotalAmount());
+        assertEquals("CONFIRMED", savedBooking.getStatus());
+        verify(bookingRepo, times(1)).save(any(Booking.class));
     }
 
     @Test
-    void testGetByBookingId_Found() {
-        when(repo.findById(201L)).thenReturn(Optional.of(booking));
-        assertEquals("CONFIRMED", service.getByBookingId(201L).getStatus());
+    void testUpdateBooking() {
+        Booking existing = new Booking();
+        existing.setBookingId(10L);
+        existing.setNumberOfRooms(1);
+
+        BookingDto updateDto = new BookingDto(
+                10L,
+                1L,
+                1L,
+                LocalDate.now().plusDays(5),
+                LocalDate.now().plusDays(7),
+                3, // Updated numberOfRooms
+                null, // Auto calculate
+                "UPDATED"
+        );
+
+        when(bookingRepo.findById(10L)).thenReturn(Optional.of(existing));
+        when(userRepo.findById(1L)).thenReturn(Optional.of(user));
+        when(roomRepo.findById(1L)).thenReturn(Optional.of(room));
+        when(bookingRepo.save(any(Booking.class))).thenAnswer(invocation -> invocation.getArgument(0));
+
+        Booking updatedBooking = bookingService.updateBooking(updateDto);
+
+        // Nights = 2, Rooms = 3, Base Fare = 2000 → 2 × 3 × 2000 = 12000
+        assertEquals(12000.0, updatedBooking.getTotalAmount());
+        assertEquals(3, updatedBooking.getNumberOfRooms());
+        assertEquals("UPDATED", updatedBooking.getStatus());
+        verify(bookingRepo, times(1)).save(any(Booking.class));
     }
 
     @Test
-    void testGetByBookingId_NotFound() {
-        when(repo.findById(999L)).thenReturn(Optional.empty());
-        assertThrows(BookingNotFoundException.class, () -> service.getByBookingId(999L));
-    }
+    void testGetBookingById_NotFound() {
+        when(bookingRepo.findById(99L)).thenReturn(Optional.empty());
 
-    @Test
-    void testGetAllBookings() {
-        when(repo.findAll()).thenReturn(Arrays.asList(booking));
-        assertEquals(1, service.getAllBookings().size());
-    }
-
-    @Test
-    void testDeleteByBookingId() {
-        when(repo.findById(201L)).thenReturn(Optional.of(booking));
-        String result = service.deleteByBookingId(201L);
-        assertEquals("Booking deleted successfully", result);
+        assertThrows(BookingNotFoundException.class, () -> bookingService.getBookingById(99L));
     }
 }

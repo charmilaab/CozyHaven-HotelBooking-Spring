@@ -30,19 +30,20 @@ class HotelServiceImplTest {
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
+
         hotel = new Hotel();
         hotel.setHotelId(101L);
         hotel.setName("Charu Palace");
         hotel.setLocation("Chennai");
-        hotel.setDescription("Luxury stay");
-        hotel.setAmenities("WiFi, Pool");
+        hotel.setDescription("Luxury hotel with sea view");
+        hotel.setAmenities("WiFi, Pool, Spa");
 
         dto = new HotelDto();
         dto.setHotelId(101L);
         dto.setName("Charu Palace");
         dto.setLocation("Chennai");
-        dto.setDescription("Luxury stay");
-        dto.setAmenities("WiFi, Pool");
+        dto.setDescription("Luxury hotel with sea view");
+        dto.setAmenities("WiFi, Pool, Spa");
     }
 
     @Test
@@ -50,12 +51,23 @@ class HotelServiceImplTest {
         when(repo.save(any(Hotel.class))).thenReturn(hotel);
         Hotel saved = service.addHotel(dto);
         assertEquals("Charu Palace", saved.getName());
+        verify(repo, times(1)).save(any(Hotel.class));
+    }
+
+    @Test
+    void testUpdateHotel() {
+        when(repo.save(any(Hotel.class))).thenReturn(hotel);
+        Hotel updated = service.updateHotel(hotel);
+        assertEquals("Charu Palace", updated.getName());
+        verify(repo, times(1)).save(hotel);
     }
 
     @Test
     void testGetByHotelId_Found() {
         when(repo.findById(101L)).thenReturn(Optional.of(hotel));
-        assertEquals("Charu Palace", service.getByHotelId(101L).getName());
+        Hotel found = service.getByHotelId(101L);
+        assertNotNull(found);
+        assertEquals("Charu Palace", found.getName());
     }
 
     @Test
@@ -65,15 +77,22 @@ class HotelServiceImplTest {
     }
 
     @Test
+    void testDeleteHotel() {
+        when(repo.findById(101L)).thenReturn(Optional.of(hotel));
+        String message = service.deleteHotel(101L);
+        assertEquals("Hotel deleted successfully", message);
+        verify(repo, times(1)).deleteById(101L);
+    }
+
+    @Test
     void testGetAllHotels() {
         when(repo.findAll()).thenReturn(Arrays.asList(hotel));
         assertEquals(1, service.getAllHotels().size());
     }
 
     @Test
-    void testDeleteByHotelId() {
-        when(repo.findById(101L)).thenReturn(Optional.of(hotel));
-        String result = service.deleteByHotelId(101L);
-        assertEquals("Hotel deleted successfully", result);
+    void testSearchHotelsByLocation() {
+        when(repo.searchHotelsByLocation("Chennai")).thenReturn(Arrays.asList(hotel));
+        assertEquals(1, service.searchHotelsByLocation("Chennai").size());
     }
 }

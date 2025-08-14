@@ -1,17 +1,14 @@
 package com.hexaware.OnlineFoodDeliverySys.service;
 
 import com.hexaware.OnlineFoodDeliverySys.dto.RoomDto;
+import com.hexaware.OnlineFoodDeliverySys.entities.Hotel;
 import com.hexaware.OnlineFoodDeliverySys.entities.Room;
-import com.hexaware.OnlineFoodDeliverySys.exceptions.RoomNotFoundException;
+import com.hexaware.OnlineFoodDeliverySys.repository.HotelRepository;
 import com.hexaware.OnlineFoodDeliverySys.repository.RoomRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-
-import java.util.Arrays;
-import java.util.Optional;
+import org.mockito.*;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -19,63 +16,124 @@ import static org.mockito.Mockito.*;
 class RoomServiceImplTest {
 
     @Mock
-    private RoomRepository repo;
+    private RoomRepository roomRepository;
+
+    @Mock
+    private HotelRepository hotelRepository;
 
     @InjectMocks
-    private RoomServiceImpl service;
+    private RoomServiceImpl roomService;
 
+    private RoomDto roomDto;
+    private Hotel hotel;
     private Room room;
-    private RoomDto dto;
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
+
+        hotel = new Hotel();
+        hotel.setHotelId(1L);
+        hotel.setName("Test Hotel");
+
+        roomDto = new RoomDto();
+        roomDto.setRoomId(1L);
+        roomDto.setHotelId(1L);
+        roomDto.setRoomType("Single");
+        roomDto.setBaseFare(1000.0);
+        roomDto.setMaxOccupancy(2);
+        roomDto.setBedType("Single");
+        roomDto.setSize("25 m²");
+
         room = new Room();
-        room.setRoomId(301L);
-        room.setRoomType("Deluxe");
-        room.setBaseFare(2500.0);
+        room.setRoomId(1L);
+        room.setHotel(hotel);
+        room.setRoomType("Single");
+        room.setBaseFare(1000.0);
         room.setMaxOccupancy(2);
-        room.setBedType("King");
-        room.setSize("300 sqft");
-
-        dto = new RoomDto();
-        dto.setRoomId(301L);
-        dto.setRoomType("Deluxe");
-        dto.setBaseFare(2500.0);
-        dto.setMaxOccupancy(2);
-        dto.setBedType("King");
-        dto.setSize("300 sqft");
+        room.setBedType("single");
+        room.setSize("25 m²");
     }
 
     @Test
-    void testAddRoom() {
-        when(repo.save(any(Room.class))).thenReturn(room);
-        Room saved = service.addRoom(dto);
-        assertEquals("Deluxe", saved.getRoomType());
+    void testAddRoom_Success() {
+        when(hotelRepository.findById(1L)).thenReturn(Optional.of(hotel));
+        when(roomRepository.save(any(Room.class))).thenReturn(room);
+
+        Room savedRoom = roomService.addRoom(roomDto);
+
+        assertNotNull(savedRoom);
+        assertEquals(roomDto.getRoomType(), savedRoom.getRoomType());
+        assertEquals("single", savedRoom.getBedType()); // normalized to lowercase
+        verify(roomRepository, times(1)).save(any(Room.class));
     }
 
     @Test
-    void testGetByRoomId_Found() {
-        when(repo.findById(301L)).thenReturn(Optional.of(room));
-        assertEquals("Deluxe", service.getByRoomId(301L).getRoomType());
+    void testAddRoom_HotelNotFound() {
+        when(hotelRepository.findById(1L)).thenReturn(Optional.empty());
+
+        RuntimeException exception = assertThrows(RuntimeException.class,
+                () -> roomService.addRoom(roomDto));
+        assertEquals("Hotel not found", exception.getMessage());
     }
 
     @Test
-    void testGetByRoomId_NotFound() {
-        when(repo.findById(999L)).thenReturn(Optional.empty());
-        assertThrows(RoomNotFoundException.class, () -> service.getByRoomId(999L));
+    void testUpdateRoom_Success() {
+        when(roomRepository.findById(1L)).thenReturn(Optional.of(room));
+        when(hotelRepository.findById(1L)).thenReturn(Optional.of(hotel));
+        when(roomRepository.save(any(Room.class))).thenReturn(room);
+
+        Room updatedRoom = roomService.updateRoom(roomDto);
+
+        assertNotNull(updatedRoom);
+        assertEquals(roomDto.getBedType().toLowerCase(), updatedRoom.getBedType());
+        verify(roomRepository, times(1)).save(any(Room.class));
     }
 
     @Test
-    void testGetAllRooms() {
-        when(repo.findAll()).thenReturn(Arrays.asList(room));
-        assertEquals(1, service.getAllRooms().size());
+    void testGetRoomById_Success() {
+        when(roomRepository.findById(1L)).thenReturn(Optional.of(room));
+
+        Room found = roomService.getRoomById(1L);
+        assertNotNull(found);
+        assertEquals(room.getRoomId(), found.getRoomId());
     }
 
     @Test
-    void testDeleteByRoomId() {
-        when(repo.findById(301L)).thenReturn(Optional.of(room));
-        String result = service.deleteByRoomId(301L);
-        assertEquals("Room deleted successfully", result);
+    void testGetRoomById_NotFound() {
+        when(roomRepository.findById(1L)).thenReturn(Optional.empty());
+
+        RuntimeException ex = assertThrows(RuntimeException.class,
+                () -> roomService.getRoomById(1L));
+        assertEquals("Room not found", ex.getMessage());
+    }
+
+    @Test
+    void testGetRoomsByHotelId() {
+        List<Room> rooms = List.of(room);
+        when(roomRepository.findRoomsByHotelId(1L)).thenReturn(rooms);
+
+        List<Room> result = roomService.getRoomsByHotelId(1L);
+        assertEquals(1, result.size());
+        assertEquals(room.getRoomId(), result.get(0).getRoomId());
+    }
+
+    @Test
+    void testDeleteRoom_Success() {
+        when(roomRepository.findById(1L)).thenReturn(Optional.of(room));
+        doNothing().when(roomRepository).delete(room);
+
+        roomService.deleteRoom(1L);
+
+        verify(roomRepository, times(1)).delete(room);
+    }
+
+    @Test
+    void testDeleteRoom_NotFound() {
+        when(roomRepository.findById(1L)).thenReturn(Optional.empty());
+
+        RuntimeException ex = assertThrows(RuntimeException.class,
+                () -> roomService.deleteRoom(1L));
+        assertEquals("Room not found", ex.getMessage());
     }
 }
