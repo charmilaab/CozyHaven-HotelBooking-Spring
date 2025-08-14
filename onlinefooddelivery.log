@@ -1,0 +1,43 @@
+[34m2025-08-14 18:43:51.910[0;39m [INFO] c.h.O.OnlineFoodDeliverySysApplication [main] Starting OnlineFoodDeliverySysApplication using Java 21.0.8 with PID 36984 (C:\Users\charmila\git\OnlineFoodDelivery-Spring\OnlineFoodDeliverySys\target\classes started by charmila in C:\Users\charmila\git\OnlineFoodDelivery-Spring\OnlineFoodDeliverySys)
+[34m2025-08-14 18:43:51.911[0;39m [DEBUG] c.h.O.OnlineFoodDeliverySysApplication [main] Running with Spring Boot v3.4.8, Spring v6.2.9
+[34m2025-08-14 18:43:51.912[0;39m [INFO] c.h.O.OnlineFoodDeliverySysApplication [main] No active profile set, falling back to 1 default profile: "default"
+[34m2025-08-14 18:43:52.314[0;39m [INFO] o.s.d.r.c.RepositoryConfigurationDelegate [main] Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+[34m2025-08-14 18:43:52.375[0;39m [INFO] o.s.d.r.c.RepositoryConfigurationDelegate [main] Finished Spring Data repository scanning in 56 ms. Found 7 JPA repository interfaces.
+[34m2025-08-14 18:43:52.681[0;39m [INFO] o.s.b.w.e.t.TomcatWebServer [main] Tomcat initialized with port 8484 (http)
+[34m2025-08-14 18:43:52.689[0;39m [INFO] o.a.c.c.StandardService [main] Starting service [Tomcat]
+[34m2025-08-14 18:43:52.690[0;39m [INFO] o.a.c.c.StandardEngine [main] Starting Servlet engine: [Apache Tomcat/10.1.43]
+[34m2025-08-14 18:43:52.722[0;39m [INFO] o.a.c.c.C.[.[.[/] [main] Initializing Spring embedded WebApplicationContext
+[34m2025-08-14 18:43:52.722[0;39m [INFO] o.s.b.w.s.c.ServletWebServerApplicationContext [main] Root WebApplicationContext: initialization completed in 781 ms
+[34m2025-08-14 18:43:52.805[0;39m [INFO] o.h.j.i.u.LogHelper [main] HHH000204: Processing PersistenceUnitInfo [name: default]
+[34m2025-08-14 18:43:52.835[0;39m [INFO] o.h.Version [main] HHH000412: Hibernate ORM core version 6.6.22.Final
+[34m2025-08-14 18:43:52.855[0;39m [INFO] o.h.c.i.RegionFactoryInitiator [main] HHH000026: Second-level cache disabled
+[34m2025-08-14 18:43:53.026[0;39m [INFO] o.s.o.j.p.SpringPersistenceUnitInfo [main] No LoadTimeWeaver setup: ignoring JPA class transformer
+[34m2025-08-14 18:43:53.043[0;39m [INFO] c.z.h.HikariDataSource [main] HikariPool-1 - Starting...
+[34m2025-08-14 18:43:53.235[0;39m [INFO] c.z.h.p.HikariPool [main] HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@5bb99d1d
+[34m2025-08-14 18:43:53.236[0;39m [INFO] c.z.h.HikariDataSource [main] HikariPool-1 - Start completed.
+[34m2025-08-14 18:43:53.265[0;39m [WARN] o.h.o.deprecation [main] HHH90000025: MySQL8Dialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+[34m2025-08-14 18:43:53.266[0;39m [WARN] o.h.o.deprecation [main] HHH90000026: MySQL8Dialect has been deprecated; use org.hibernate.dialect.MySQLDialect instead
+[34m2025-08-14 18:43:53.276[0;39m [INFO] o.h.o.c.pooling [main] HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 8.0
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+[34m2025-08-14 18:43:53.940[0;39m [INFO] o.h.e.t.j.p.i.JtaPlatformInitiator [main] HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+[34m2025-08-14 18:43:54.001[0;39m [INFO] o.s.o.j.LocalContainerEntityManagerFactoryBean [main] Initialized JPA EntityManagerFactory for persistence unit 'default'
+[34m2025-08-14 18:43:54.140[0;39m [INFO] o.s.d.j.r.q.QueryEnhancerFactory [main] Hibernate is in classpath; If applicable, HQL parser will be used.
+[34m2025-08-14 18:43:54.461[0;39m [DEBUG] c.h.O.c.JwtAuthFilter [main] Filter 'jwtAuthFilter' configured for use
+[34m2025-08-14 18:43:54.492[0;39m [INFO] o.s.s.c.a.a.c.InitializeAuthenticationProviderBeanManagerConfigurer$InitializeAuthenticationProviderManagerConfigurer [main] Global AuthenticationManager configured with AuthenticationProvider bean with name authenticationProvider
+[34m2025-08-14 18:43:54.492[0;39m [WARN] o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer [main] Global AuthenticationManager configured with an AuthenticationProvider bean. UserDetailsService beans will not be used by Spring Security for automatically configuring username/password login. Consider removing the AuthenticationProvider bean. Alternatively, consider using the UserDetailsService in a manually instantiated DaoAuthenticationProvider. If the current configuration is intentional, to turn off this warning, increase the logging level of 'org.springframework.security.config.annotation.authentication.configuration.InitializeUserDetailsBeanManagerConfigurer' to ERROR
+[34m2025-08-14 18:43:54.704[0;39m [WARN] o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration [main] spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+[34m2025-08-14 18:43:54.861[0;39m [DEBUG] o.s.s.w.DefaultSecurityFilterChain [main] Will secure any request with filters: DisableEncodeUrlFilter, WebAsyncManagerIntegrationFilter, SecurityContextHolderFilter, HeaderWriterFilter, LogoutFilter, JwtAuthFilter, RequestCacheAwareFilter, SecurityContextHolderAwareRequestFilter, AnonymousAuthenticationFilter, SessionManagementFilter, ExceptionTranslationFilter, AuthorizationFilter
+[34m2025-08-14 18:43:55.009[0;39m [INFO] o.s.b.w.e.t.TomcatWebServer [main] Tomcat started on port 8484 (http) with context path '/'
+[34m2025-08-14 18:43:55.014[0;39m [INFO] c.h.O.OnlineFoodDeliverySysApplication [main] Started OnlineFoodDeliverySysApplication in 3.374 seconds (process running for 3.757)
+[34m2025-08-14 18:46:49.001[0;39m [INFO] o.s.b.a.SpringApplicationAdminMXBeanRegistrar$SpringApplicationAdmin [RMI TCP Connection(6)-127.0.0.1] Application shutdown requested.
+[34m2025-08-14 18:46:49.003[0;39m [INFO] o.s.b.w.e.t.GracefulShutdown [RMI TCP Connection(6)-127.0.0.1] Commencing graceful shutdown. Waiting for active requests to complete
+[34m2025-08-14 18:46:49.007[0;39m [INFO] o.s.b.w.e.t.GracefulShutdown [tomcat-shutdown] Graceful shutdown complete
+[34m2025-08-14 18:46:49.011[0;39m [INFO] o.s.o.j.LocalContainerEntityManagerFactoryBean [RMI TCP Connection(6)-127.0.0.1] Closing JPA EntityManagerFactory for persistence unit 'default'
+[34m2025-08-14 18:46:49.013[0;39m [INFO] c.z.h.HikariDataSource [RMI TCP Connection(6)-127.0.0.1] HikariPool-1 - Shutdown initiated...
+[34m2025-08-14 18:46:49.021[0;39m [INFO] c.z.h.HikariDataSource [RMI TCP Connection(6)-127.0.0.1] HikariPool-1 - Shutdown completed.
