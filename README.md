@@ -1,6 +1,6 @@
-# Online Food Delivery System – Spring Boot
+# CozyHaven Hotel Booking – Spring Boot
 
-A Spring Boot project for managing an **Online Food Delivery System** with JWT authentication and CRUD operations.
+A Spring Boot project for managing an **CozyHaven - Hotel Booking** with JWT authentication and CRUD operations.
 
 ## Features
 - User registration & login
