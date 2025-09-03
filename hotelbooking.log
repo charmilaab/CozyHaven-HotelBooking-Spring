@@ -1887,3 +1887,45 @@ Caused by: org.hibernate.NonUniqueResultException: Query did not return a unique
 [34m2025-09-03 18:04:34.062[0;39m [INFO] o.s.o.j.LocalContainerEntityManagerFactoryBean [RMI TCP Connection(8)-127.0.0.1] Closing JPA EntityManagerFactory for persistence unit 'default'
 [34m2025-09-03 18:04:34.063[0;39m [INFO] c.z.h.HikariDataSource [RMI TCP Connection(8)-127.0.0.1] HikariPool-1 - Shutdown initiated...
 [34m2025-09-03 18:04:34.072[0;39m [INFO] c.z.h.HikariDataSource [RMI TCP Connection(8)-127.0.0.1] HikariPool-1 - Shutdown completed.
+[34m2025-09-03 20:59:14.043[0;39m [INFO] c.h.h.hotelbookingApplication [main] Starting hotelbookingApplication using Java 21.0.8 with PID 25108 (C:\Users\charmila\git\CozyHaven\CozyHaven - Hotel Booking\target\classes started by charmila in C:\Users\charmila\git\CozyHaven\CozyHaven - Hotel Booking)
+[34m2025-09-03 20:59:14.044[0;39m [DEBUG] c.h.h.hotelbookingApplication [main] Running with Spring Boot v3.4.8, Spring v6.2.9
+[34m2025-09-03 20:59:14.045[0;39m [INFO] c.h.h.hotelbookingApplication [main] No active profile set, falling back to 1 default profile: "default"
+[34m2025-09-03 20:59:14.755[0;39m [INFO] o.s.d.r.c.RepositoryConfigurationDelegate [main] Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+[34m2025-09-03 20:59:14.857[0;39m [INFO] o.s.d.r.c.RepositoryConfigurationDelegate [main] Finished Spring Data repository scanning in 94 ms. Found 7 JPA repository interfaces.
+[34m2025-09-03 20:59:15.349[0;39m [INFO] o.s.b.w.e.t.TomcatWebServer [main] Tomcat initialized with port 8080 (http)
+[34m2025-09-03 20:59:15.361[0;39m [INFO] o.a.c.c.StandardService [main] Starting service [Tomcat]
+[34m2025-09-03 20:59:15.362[0;39m [INFO] o.a.c.c.StandardEngine [main] Starting Servlet engine: [Apache Tomcat/10.1.43]
+[34m2025-09-03 20:59:15.409[0;39m [INFO] o.a.c.c.C.[.[.[/] [main] Initializing Spring embedded WebApplicationContext
+[34m2025-09-03 20:59:15.409[0;39m [INFO] o.s.b.w.s.c.ServletWebServerApplicationContext [main] Root WebApplicationContext: initialization completed in 1323 ms
+[34m2025-09-03 20:59:15.525[0;39m [INFO] o.h.j.i.u.LogHelper [main] HHH000204: Processing PersistenceUnitInfo [name: default]
+[34m2025-09-03 20:59:15.580[0;39m [INFO] o.h.Version [main] HHH000412: Hibernate ORM core version 6.6.22.Final
+[34m2025-09-03 20:59:15.613[0;39m [INFO] o.h.c.i.RegionFactoryInitiator [main] HHH000026: Second-level cache disabled
+[34m2025-09-03 20:59:15.892[0;39m [INFO] o.s.o.j.p.SpringPersistenceUnitInfo [main] No LoadTimeWeaver setup: ignoring JPA class transformer
+[34m2025-09-03 20:59:15.921[0;39m [INFO] c.z.h.HikariDataSource [main] HikariPool-1 - Starting...
+[34m2025-09-03 20:59:16.202[0;39m [INFO] c.z.h.p.HikariPool [main] HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@43445fc6
+[34m2025-09-03 20:59:16.203[0;39m [INFO] c.z.h.HikariDataSource [main] HikariPool-1 - Start completed.
+[34m2025-09-03 20:59:16.269[0;39m [WARN] o.h.o.deprecation [main] HHH90000025: MySQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+[34m2025-09-03 20:59:16.285[0;39m [INFO] o.h.o.c.pooling [main] HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 8.0.42
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+[34m2025-09-03 20:59:17.332[0;39m [INFO] o.h.e.t.j.p.i.JtaPlatformInitiator [main] HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+[34m2025-09-03 20:59:17.429[0;39m [INFO] o.s.o.j.LocalContainerEntityManagerFactoryBean [main] Initialized JPA EntityManagerFactory for persistence unit 'default'
+[34m2025-09-03 20:59:17.643[0;39m [INFO] o.s.d.j.r.q.QueryEnhancerFactory [main] Hibernate is in classpath; If applicable, HQL parser will be used.
+[34m2025-09-03 20:59:18.089[0;39m [DEBUG] c.h.h.c.JwtAuthFilter [main] Filter 'jwtAuthFilter' configured for use
+[34m2025-09-03 20:59:18.133[0;39m [INFO] o.s.s.c.a.a.c.InitializeAuthenticationProviderBeanManagerConfigurer$InitializeAuthenticationProviderManagerConfigurer [main] Global AuthenticationManager configured with AuthenticationProvider bean with name authenticationProvider
+[34m2025-09-03 20:59:18.133[0;39m [WARN] o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer [main] Global AuthenticationManager configured with an AuthenticationProvider bean. UserDetailsService beans will not be used by Spring Security for automatically configuring username/password login. Consider removing the AuthenticationProvider bean. Alternatively, consider using the UserDetailsService in a manually instantiated DaoAuthenticationProvider. If the current configuration is intentional, to turn off this warning, increase the logging level of 'org.springframework.security.config.annotation.authentication.configuration.InitializeUserDetailsBeanManagerConfigurer' to ERROR
+[34m2025-09-03 20:59:18.409[0;39m [WARN] o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration [main] spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+[34m2025-09-03 20:59:18.649[0;39m [DEBUG] o.s.s.w.DefaultSecurityFilterChain [main] Will secure any request with filters: DisableEncodeUrlFilter, WebAsyncManagerIntegrationFilter, SecurityContextHolderFilter, HeaderWriterFilter, CorsFilter, LogoutFilter, JwtAuthFilter, RequestCacheAwareFilter, SecurityContextHolderAwareRequestFilter, AnonymousAuthenticationFilter, SessionManagementFilter, ExceptionTranslationFilter, AuthorizationFilter
+[34m2025-09-03 20:59:18.865[0;39m [INFO] o.s.b.w.e.t.TomcatWebServer [main] Tomcat started on port 8080 (http) with context path '/'
+[34m2025-09-03 20:59:18.873[0;39m [INFO] c.h.h.hotelbookingApplication [main] Started hotelbookingApplication in 5.253 seconds (process running for 5.804)
+[34m2025-09-03 21:03:11.789[0;39m [INFO] o.s.b.a.SpringApplicationAdminMXBeanRegistrar$SpringApplicationAdmin [RMI TCP Connection(7)-127.0.0.1] Application shutdown requested.
+[34m2025-09-03 21:03:11.793[0;39m [INFO] o.s.b.w.e.t.GracefulShutdown [RMI TCP Connection(7)-127.0.0.1] Commencing graceful shutdown. Waiting for active requests to complete
+[34m2025-09-03 21:03:11.803[0;39m [INFO] o.s.b.w.e.t.GracefulShutdown [tomcat-shutdown] Graceful shutdown complete
+[34m2025-09-03 21:03:11.809[0;39m [INFO] o.s.o.j.LocalContainerEntityManagerFactoryBean [RMI TCP Connection(7)-127.0.0.1] Closing JPA EntityManagerFactory for persistence unit 'default'
+[34m2025-09-03 21:03:11.814[0;39m [INFO] c.z.h.HikariDataSource [RMI TCP Connection(7)-127.0.0.1] HikariPool-1 - Shutdown initiated...
+[34m2025-09-03 21:03:11.825[0;39m [INFO] c.z.h.HikariDataSource [RMI TCP Connection(7)-127.0.0.1] HikariPool-1 - Shutdown completed.
