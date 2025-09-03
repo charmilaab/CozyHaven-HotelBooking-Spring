@@ -6,7 +6,6 @@ import lombok.Data;
 @Data
 public class RoomDto {
 
-    @NotNull @Positive
     private Long roomId;
 
     @NotNull @Positive

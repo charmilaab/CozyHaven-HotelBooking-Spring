@@ -13,6 +13,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 public class Transportation {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long transportId;
 
     private String type;

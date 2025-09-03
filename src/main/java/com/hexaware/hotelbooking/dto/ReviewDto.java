@@ -10,7 +10,6 @@ import lombok.Data;
 public class ReviewDto {
     
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long reviewId;
 
 

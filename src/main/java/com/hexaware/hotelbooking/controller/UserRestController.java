@@ -13,6 +13,7 @@ import java.util.List;
 @Slf4j
 @RestController
 @RequestMapping("/api/users")
+@CrossOrigin(origins = "http://localhost:5173") 
 public class UserRestController {
 
     @Autowired private UserService service;

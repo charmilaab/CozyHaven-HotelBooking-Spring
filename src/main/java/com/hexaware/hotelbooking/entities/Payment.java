@@ -15,6 +15,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 public class Payment {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long paymentId;
 
     @OneToOne

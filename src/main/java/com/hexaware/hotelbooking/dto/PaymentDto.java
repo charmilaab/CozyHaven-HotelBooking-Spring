@@ -5,7 +5,6 @@ import lombok.Data;
 
 @Data
 public class PaymentDto {
-    @NotNull @Positive
     private Long paymentId;
 
     @NotNull @Positive

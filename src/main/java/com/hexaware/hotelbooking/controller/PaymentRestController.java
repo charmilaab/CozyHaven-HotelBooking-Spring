@@ -9,7 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
-@RestController @RequestMapping("/api/payments")
+@RestController 
+@RequestMapping("/api/payments")
+@CrossOrigin(origins = "http://localhost:5173") 
 public class PaymentRestController {
     @Autowired private PaymentService service;
 

@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Data
 public class UserDto {
-    @NotNull @Positive
+    
     private Long userId;
 
     @NotBlank

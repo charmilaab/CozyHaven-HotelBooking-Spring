@@ -5,7 +5,6 @@ import lombok.Data;
 
 @Data
 public class HotelDto {
-    @NotNull @Positive
     private Long hotelId;
 
     @NotBlank @Size(min = 2, max = 60)

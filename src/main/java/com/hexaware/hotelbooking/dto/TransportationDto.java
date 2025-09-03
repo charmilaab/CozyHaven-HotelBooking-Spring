@@ -5,14 +5,13 @@ import lombok.Data;
 
 @Data
 public class TransportationDto {
-    @NotNull @Positive
     private Long transportId;
 
     @NotNull @Positive
     private Long hotelId;
 
     @NotBlank
-    @Pattern(regexp = "^(Airport Pickup|Cab|Bus|Shuttle)$", message = "type must be Airport Pickup/Cab/Bus/Shuttle")
+    @Pattern(regexp = "^(Airport Pickup|Cab|Bus)$", message = "type must be Airport Pickup/Cab/Bus")
     private String type;
 
     @NotBlank @Size(min = 3, max = 200)
