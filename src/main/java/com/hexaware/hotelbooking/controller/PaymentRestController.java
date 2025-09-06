@@ -23,6 +23,12 @@ public class PaymentRestController {
 
     @GetMapping("/getbyid/{paymentId}")
     public Payment get(@PathVariable Long paymentId) { return service.getByPaymentId(paymentId); }
+    
+    @GetMapping("/byuser/{userId}")
+    public List<Payment> byUser(@PathVariable Long userId) {
+        return service.getPaymentsByUser(userId);
+    }
+
 
     @DeleteMapping("/deletebyid/{paymentId}")
     public String delete(@PathVariable Long paymentId) { return service.deleteByPaymentId(paymentId); }

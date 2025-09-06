@@ -20,7 +20,7 @@ public class TransportationRestController {
     public Transportation add(@RequestBody @Valid TransportationDto dto) { return service.addTransport(dto); }
 
     @PutMapping("/update")
-    public Transportation update(@RequestBody @Valid Transportation transport) { return service.updateTransport(transport); }
+    public Transportation update(@RequestBody @Valid TransportationDto dto) { return service.updateTransport(dto); }
 
     @GetMapping("/getbyid/{id}")
     public Transportation get(@PathVariable Long id) { return service.getByTransportId(id); }
@@ -31,6 +31,6 @@ public class TransportationRestController {
     @GetMapping("/getall")
     public List<Transportation> all() { return service.getAllTransport(); }
 
-    @GetMapping("/byhotel/{hotelId}")
+    @GetMapping("/getbyhotel/{hotelId}")
     public List<Transportation> byHotel(@PathVariable Long hotelId) { return service.getTransportByHotel(hotelId); }
 }

@@ -1,12 +1,17 @@
 package com.hexaware.hotelbooking.dto;
 
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import jakarta.validation.constraints.*;
 import lombok.Data;
 
 @Data
 public class RoomDto {
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long roomId;
 
-    private Long roomId;
 
     @NotNull @Positive
     private Long hotelId;
@@ -15,7 +20,7 @@ public class RoomDto {
     @Pattern(regexp = "^(?i)(Single|Double|King|Suite)$", message = "roomType must be Single/Double/King/Suite")
     private String roomType;
 
-    @NotNull @Positive
+     @Positive
     private Double baseFare;
 
     @NotNull @Min(1) @Max(10)

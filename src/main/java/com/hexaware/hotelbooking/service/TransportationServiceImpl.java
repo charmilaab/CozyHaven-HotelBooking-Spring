@@ -30,13 +30,22 @@ public class TransportationServiceImpl implements TransportationService {
         t.setCost(dto.getCost());
         return repo.save(t);
     }
-
     @Override
-    public Transportation updateTransport(Transportation transport) {
-        repo.findById(transport.getTransportId())
-            .orElseThrow(() -> new TransportationNotFoundException("Transport not found: " + transport.getTransportId()));
+    public Transportation updateTransport(TransportationDto dto) {
+        Transportation transport = repo.findById(dto.getTransportId())
+            .orElseThrow(() -> new RuntimeException("Transport not found"));
+
+        transport.setType(dto.getType());
+        transport.setDetails(dto.getDetails());
+        transport.setCost(dto.getCost());
+
+        Hotel hotel = hotelRepo.findById(dto.getHotelId())
+            .orElseThrow(() -> new RuntimeException("Hotel not found"));
+        transport.setHotel(hotel);
+
         return repo.save(transport);
     }
+
 
     @Override
     public Transportation getByTransportId(Long transportId) {

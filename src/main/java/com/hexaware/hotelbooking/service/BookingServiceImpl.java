@@ -4,18 +4,21 @@ import com.hexaware.hotelbooking.dto.BookingDto;
 import com.hexaware.hotelbooking.entities.Booking;
 import com.hexaware.hotelbooking.entities.Room;
 import com.hexaware.hotelbooking.entities.User;
+import com.hexaware.hotelbooking.entities.Transportation;
 import com.hexaware.hotelbooking.exceptions.BookingNotFoundException;
 import com.hexaware.hotelbooking.exceptions.RoomNotFoundException;
 import com.hexaware.hotelbooking.exceptions.UserNotFoundException;
 import com.hexaware.hotelbooking.repository.BookingRepository;
 import com.hexaware.hotelbooking.repository.RoomRepository;
 import com.hexaware.hotelbooking.repository.UserRepository;
+import com.hexaware.hotelbooking.repository.TransportationRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.temporal.ChronoUnit;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class BookingServiceImpl implements BookingService {
@@ -29,8 +32,27 @@ public class BookingServiceImpl implements BookingService {
     @Autowired
     private RoomRepository roomRepo;
 
+    @Autowired
+    private TransportationRepository transportRepo;
+
+    private BookingDto convertToDto(Booking booking) {
+        return new BookingDto(
+            booking.getBookingId(),
+            booking.getTransport() != null ? booking.getTransport().getTransportId() : null,
+            booking.getTransport(), // pass full transport object
+            booking.getUser().getUserId(),
+            booking.getRoom().getRoomId(),
+            booking.getCheckInDate(),
+            booking.getCheckOutDate(),
+            booking.getNumberOfRooms(),
+            booking.getTotalAmount(),
+            booking.getStatus()
+        );
+    }
+
+
     @Override
-    public Booking addBooking(BookingDto bookingDto) {
+    public BookingDto addBooking(BookingDto bookingDto) {
         User user = userRepo.findById(bookingDto.getUserId())
                 .orElseThrow(() -> new UserNotFoundException("User not found with ID: " + bookingDto.getUserId()));
 
@@ -43,6 +65,13 @@ public class BookingServiceImpl implements BookingService {
         booking.setCheckInDate(bookingDto.getCheckInDate());
         booking.setCheckOutDate(bookingDto.getCheckOutDate());
 
+        // ✅ Optional Transport
+        if (bookingDto.getTransportId() != null) {
+            Transportation transport = transportRepo.findById(bookingDto.getTransportId())
+                    .orElseThrow(() -> new RuntimeException("Transport not found with ID: " + bookingDto.getTransportId()));
+            booking.setTransport(transport);
+        }
+
         int numRooms = bookingDto.getNumberOfRooms() != null ? bookingDto.getNumberOfRooms() : 1;
         booking.setNumberOfRooms(numRooms);
 
@@ -50,16 +79,22 @@ public class BookingServiceImpl implements BookingService {
             booking.setTotalAmount(bookingDto.getTotalAmount());
         } else {
             long nights = ChronoUnit.DAYS.between(bookingDto.getCheckInDate(), bookingDto.getCheckOutDate());
-            booking.setTotalAmount(room.getBaseFare() * numRooms * nights);
+            double total = room.getBaseFare() * numRooms * nights;
+
+            if (booking.getTransport() != null) {
+                total += booking.getTransport().getCost();
+            }
+            booking.setTotalAmount(total);
         }
 
         booking.setStatus(bookingDto.getStatus());
 
-        return bookingRepo.save(booking);
+        booking = bookingRepo.save(booking);
+        return convertToDto(booking);
     }
 
     @Override
-    public Booking updateBooking(BookingDto bookingDto) {
+    public BookingDto updateBooking(BookingDto bookingDto) {
         Booking existing = bookingRepo.findById(bookingDto.getBookingId())
                 .orElseThrow(() -> new BookingNotFoundException("Booking not found with ID: " + bookingDto.getBookingId()));
 
@@ -74,6 +109,15 @@ public class BookingServiceImpl implements BookingService {
         existing.setCheckInDate(bookingDto.getCheckInDate());
         existing.setCheckOutDate(bookingDto.getCheckOutDate());
 
+        // ✅ Update transport
+        if (bookingDto.getTransportId() != null) {
+            Transportation transport = transportRepo.findById(bookingDto.getTransportId())
+                    .orElseThrow(() -> new RuntimeException("Transport not found with ID: " + bookingDto.getTransportId()));
+            existing.setTransport(transport);
+        } else {
+            existing.setTransport(null);
+        }
+
         if (bookingDto.getNumberOfRooms() != null) {
             existing.setNumberOfRooms(bookingDto.getNumberOfRooms());
         }
@@ -83,23 +127,33 @@ public class BookingServiceImpl implements BookingService {
         } else {
             long nights = ChronoUnit.DAYS.between(bookingDto.getCheckInDate(), bookingDto.getCheckOutDate());
             int numRooms = existing.getNumberOfRooms() != null ? existing.getNumberOfRooms() : 1;
-            existing.setTotalAmount(room.getBaseFare() * numRooms * nights);
+            double total = room.getBaseFare() * numRooms * nights;
+
+            if (existing.getTransport() != null) {
+                total += existing.getTransport().getCost();
+            }
+            existing.setTotalAmount(total);
         }
 
         existing.setStatus(bookingDto.getStatus());
 
-        return bookingRepo.save(existing);
+        existing = bookingRepo.save(existing);
+        return convertToDto(existing);
     }
 
     @Override
-    public List<Booking> getAllBookings() {
-        return bookingRepo.findAll();
+    public List<BookingDto> getAllBookings() {
+        return bookingRepo.findAll()
+                .stream()
+                .map(this::convertToDto)
+                .collect(Collectors.toList());
     }
 
     @Override
-    public Booking getBookingById(Long bookingId) {
-        return bookingRepo.findById(bookingId)
+    public BookingDto getBookingById(Long bookingId) {
+        Booking booking = bookingRepo.findById(bookingId)
                 .orElseThrow(() -> new BookingNotFoundException("Booking not found with ID: " + bookingId));
+        return convertToDto(booking);
     }
 
     @Override
@@ -107,5 +161,13 @@ public class BookingServiceImpl implements BookingService {
         Booking booking = bookingRepo.findById(bookingId)
                 .orElseThrow(() -> new BookingNotFoundException("Booking not found with ID: " + bookingId));
         bookingRepo.delete(booking);
+    }
+
+    @Override
+    public List<BookingDto> getBookingsByUser(Long userId) {
+        return bookingRepo.findByUserUserId(userId)
+                .stream()
+                .map(this::convertToDto)
+                .collect(Collectors.toList());
     }
 }

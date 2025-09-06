@@ -21,14 +21,20 @@ public class PaymentServiceImpl implements PaymentService {
     public Payment addPayment(PaymentDto dto) {
         Booking booking = bookingRepo.findById(dto.getBookingId())
                 .orElseThrow(() -> new BookingNotFoundException("Booking not found: " + dto.getBookingId()));
-        Payment p = new Payment();
-        p.setPaymentId(dto.getPaymentId());
-        p.setBooking(booking);
-        p.setAmount(dto.getAmount());
-        p.setPaymentMethod(dto.getPaymentMethod());
-        p.setStatus(dto.getStatus());
-        p.setPaymentDate(LocalDateTime.now());
-        return repo.save(p);
+
+        Payment payment = new Payment();
+        payment.setBooking(booking);
+        payment.setAmount(dto.getAmount());
+        payment.setPaymentMethod(dto.getPaymentMethod());
+        payment.setStatus(dto.getStatus());
+        payment.setPaymentDate(LocalDateTime.now());
+
+        // link both ways
+        booking.setPayment(payment);
+        booking.setStatus("PAID"); // ✅ update booking status
+
+        bookingRepo.save(booking); // save booking with updated status
+        return payment;
     }
 
     @Override
@@ -43,6 +49,11 @@ public class PaymentServiceImpl implements PaymentService {
         return repo.findById(id)
                 .orElseThrow(() -> new PaymentNotFoundException("Payment not found: " + id));
     }
+    @Override
+    public List<Payment> getPaymentsByUser(Long userId) {
+        return repo.findPaymentsByUserId(userId);
+    }
+
 
     @Override
     public String deleteByPaymentId(Long id) {

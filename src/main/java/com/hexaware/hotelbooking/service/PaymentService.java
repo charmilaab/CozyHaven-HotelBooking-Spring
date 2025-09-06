@@ -9,6 +9,7 @@ public interface PaymentService {
     Payment addPayment(PaymentDto dto);
     Payment updatePayment(Payment payment);
     Payment getByPaymentId(Long id);
+    List<Payment> getPaymentsByUser(Long userId);
     String deleteByPaymentId(Long id);
     List<Payment> getAllPayments();
     Payment getByBooking(Long bookingId);

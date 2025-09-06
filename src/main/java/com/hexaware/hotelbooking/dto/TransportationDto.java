@@ -7,11 +7,10 @@ import lombok.Data;
 public class TransportationDto {
     private Long transportId;
 
-    @NotNull @Positive
     private Long hotelId;
 
     @NotBlank
-    @Pattern(regexp = "^(Airport Pickup|Cab|Bus)$", message = "type must be Airport Pickup/Cab/Bus")
+    @Pattern(regexp = "^(Cab|Bus|Bike)$", message = "type must be Cab/Bus/Bike")
     private String type;
 
     @NotBlank @Size(min = 3, max = 200)

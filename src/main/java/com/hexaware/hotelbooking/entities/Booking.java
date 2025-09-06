@@ -28,6 +28,11 @@ public class Booking {
     @JoinColumn(name = "room_id", nullable = false)
     @JsonBackReference(value = "room-booking")
     private Room room;
+    
+    @ManyToOne
+    @JoinColumn(name = "transport_id", nullable=true)
+    @JsonBackReference(value = "booking-transport")
+    private Transportation transport;
 
     private LocalDate checkInDate;
     private LocalDate checkOutDate;

@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface TransportationService {
     Transportation addTransport(TransportationDto dto);
-    Transportation updateTransport(Transportation transport);
+    Transportation updateTransport(TransportationDto dto);
     Transportation getByTransportId(Long transportId);
     String deleteByTransportId(Long transportId);
     List<Transportation> getAllTransport();
