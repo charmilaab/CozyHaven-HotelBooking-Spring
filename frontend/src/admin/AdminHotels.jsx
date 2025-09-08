@@ -18,7 +18,6 @@ export default function AdminHotels() {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
 
-  // Load all hotels
   const loadHotels = async () => {
     try {
       const res = await getAllHotels();
@@ -33,12 +32,10 @@ export default function AdminHotels() {
     loadHotels();
   }, []);
 
-  // Handle input change
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  // Save hotel (add or update)
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -61,7 +58,6 @@ export default function AdminHotels() {
     }
   };
 
-  // Delete hotel
   const handleDelete = async (id) => {
     if (!window.confirm("Are you sure you want to delete this hotel?")) return;
     try {
@@ -73,7 +69,6 @@ export default function AdminHotels() {
     }
   };
 
-  // Edit hotel
   const handleEdit = (hotel) => {
     setForm({
       name: hotel.name,
@@ -91,15 +86,12 @@ export default function AdminHotels() {
       <h2 className="text-2xl font-bold mb-4 text-blue-600">
         Admin – Manage Hotels
       </h2>
-<h1 className="text-3xl font-bold underline">
-      Hello world!
-    </h1>
+
       {error && <div className="bg-red-100 text-red-700 p-2 mb-4">{error}</div>}
       {success && (
         <div className="bg-green-100 text-green-700 p-2 mb-4">{success}</div>
       )}
 
-      {/* Form */}
       <form
         onSubmit={handleSubmit}
         className="bg-white shadow-md rounded-lg p-4 mb-6"
