@@ -10,10 +10,10 @@ import {
 const empty = {
   transportId: null,
   hotelId: "",
-  type: "Airport Pickup", // Changed from "mode"
-  details: "",           // Changed from "provider"
+  type: "Cab", 
+  details: "",           
   cost: 0,
-  // Removed "notes" as it's not in backend
+  
 };
 
 export default function AdminTransport() {
@@ -54,8 +54,8 @@ export default function AdminTransport() {
       const dto = {
         transportId: form.transportId || undefined,
         hotelId: Number(hotelId),
-        type: form.type,        // Changed from "mode"
-        details: form.details,  // Changed from "provider"
+        type: form.type,        
+        details: form.details,  
         cost: Number(form.cost),
       };
 
@@ -82,8 +82,8 @@ export default function AdminTransport() {
     setForm({
       transportId: t.transportId,
       hotelId: String(t.hotelId || t.hotel?.hotelId || hotelId),
-      type: t.type,           // Changed from "mode"
-      details: t.details,     // Changed from "provider"
+      type: t.type,           
+      details: t.details,     
       cost: t.cost,
     });
     setSuccess("");
@@ -116,9 +116,10 @@ export default function AdminTransport() {
 
   const getTypeColor = (type) => {
     const colors = {
-      "Airport Pickup": "bg-blue-100 text-blue-800",
+      
       "Cab": "bg-green-100 text-green-800", 
       "Bus": "bg-purple-100 text-purple-800",
+      "Bike": "bg-blue-100 text-blue-800",
     };
     return colors[type] || "bg-gray-100 text-gray-800";
   };
@@ -191,9 +192,9 @@ export default function AdminTransport() {
                   }
                   className="w-full px-4 py-3 border rounded-lg"
                 >
-                  <option value="Airport Pickup">Airport Pickup</option>
                   <option value="Cab">Cab</option>
-                  <option value="Bus">Bus</option>
+                  <option value="Cab">Bus</option>
+                  <option value="Bus">Bike</option>
                 </select>
               </div>
               <div>
